@@ -1,0 +1,1970 @@
+===УСТАНОВКА 
+    composer global require "laravel/installer"
+    cd domains
+	C:\Users\Alhimik\AppData\Roaming\Composer\vendor\bin
+    laravel new blog
+
+===ПОЛЕЗНОСТИ
+dump();// view heler
+abord(404); 
+strip_tags()
+public_path() 
+
+
+
+===”айлы
+    C:\OpenServer\OSPanel\domains\mylar\.env - переменные среды разработки все попадает в $_ENV['KEY']
+    C:\OpenServer\OSPanel\domains\mylar\config\app.php - предоставляет доступ к .env и уст поумолчанию
+    C:\OpenServer\OSPanel\domains\mylar\config\database.php - настрока базы данных
+
+===КОНСОЛЬ
+    php artisan list - список доступных команд
+    php artisan help app:name
+
+===МАРШРУТИЗАТОР
+    C:\OpenServer\OSPanel\domains\mylar\routes\web.php - маршруты
+    Route::get('/', function () { return view('welcome');});
+    Route::post('/action-form', function () {print_r($_POST);}); // для пост
+    Route::match(['get', 'post'], '/', function () {}); // для get и post
+    Route::any('/', function () {}); // для всех 
+
+    Route::get('/page/{id}/{cat}', function ($id, $cat) { // передача параметров обяательно
+    echo $id.'-'.$cat;
+    }); 
+    Route::get('/page/{id?}/{cat}', function ($id = null, $cat) { // передача параметров НЕ обяательно
+    echo $id.'-'.$cat;
+    });
+    Route::get('/page/{id}', function ($id) { // передача параметров регулярные
+    })->where('id','[0-9]+'); // ->where(['id' => '[0-9]+'], 'cat' => '[A-Za-z]+']);
+    
+    - для того что б не писать для каждого маршрута и id параметра рег выражение:
+        C:\OpenServer\OSPanel\domains\mylar\app\Providers\RouteServiceProvider.php =>  boot() => + Route::pattern('id', '[0-9]+'); или Route::patterns(['id' => '[0-9]+']);
+    
+    - если нужно обьединить маршруты к примеру для admin:
+        Route::group(['prefix' => 'admin'], function () { // можно ['prefix' => 'admin/{id}']
+            Route::get('/page/create', function () {
+                echo 'Page/create';
+            });
+            Route::get('/page/edit', function () {
+                echo 'Page/edit';
+            });
+        });
+    - Тип контроллер
+        - создает автоматом маршруты для методов контроллера
+        Route::controller('/about', 'Dir\FirstController');
+        // задать имена:
+        Route::controller('/about', 'Dir\FirstController', ['methodName' => 'Name']);
+        в контроллере есть методы getIndex anyBlabla getCreate postIndex // префикс соответствует методу 
+        url:
+            /about - getIndex
+            /about/create - getCreate
+            post запрос -  postIndex
+
+
+===ФОРМИРОВАНИЕ ССЫЛОК
+    - нужно содать роутер:
+        Route::get('/my', function () {
+            return view('welcome');
+        })->name('home');
+    
+    Route::get('/page/create', function () {
+        echo route('home');
+    });
+    - редирект:
+        return redirect()->route('home');
+        return redirect()->action('ContactController@show')->with();
+        return redirect()->route('home', ['id' => 25]); // передача параметров
+===ВИДЫ
+    C:\OpenServer\OSPanel\domains\mylar\resources\views\ - виды
+
+=== Добратся до конфига
+    config(['app.locale' => 'America/Chicago']);
+    echo config('app.locale');
+    echo env('APP_ENV'); // до переменных окружения
+    config('app.locale'); // верент  'locale' => 'en'
+
+=== ПСЕВДОНИМ
+    C:\OpenServer\OSPanel\domains\mylar\config\app.php // aliases Route::
+
+=== КОНТРОЛЛЕР
+    C:\OpenServer\OSPanel\domains\mylar\app\Http\Controllers
+    - Создать через консоль
+        идем в папку сайта
+        рhp artisan make:controller My
+        рhp artisan make:controller Admin\My // Admin - каталог
+        
+    - Роутер
+        Route::get('/about', 'FirstController@show'); // show это метод
+        если:
+            C:\OpenServer\OSPanel\domains\mylar\app\Http\Controllers\Dir
+        то:
+            Route::get('/about', 'Dir\FirstController@show'); // show это метод @getPages
+    
+    - Параметры в
+        Route::get('/about/{id}', 'FirstController@show');
+        public function show($id){
+          echo $id;  
+        }
+    
+    - КОНТРОЛЛЕР ТИПА РЕСУРС
+        php artisan make:controller Admin\CoreResourse --resource // вместе с методами которые автоматом будут работать the typical "CRUD" РOST GET PUT DELETE
+        Route::resource('/pages', 'Admin\CoreResource'); // для каждого метода сво маршрут
+        Route::resource('/pages', 'Admin\CoreResource', ['only' => ['index', 'show']]); // тольео для методов index и show
+        если:
+            ['except' => ['show']] // будут исключены
+
+        если нужно добавить свой метод в контроллер:
+            Route::get('/pages/add', 'Admin\CoreResource@add'); // свой метод в контроллере
+            Route::resource('/pages', 'Admin\CoreResource', ['only' => ['index', 'show']]);
+
+    что б в контроллере добратся до url роута:
+        echo route('ages.create');
+
+=== КЛАСС ПОСРЕДНИК
+    проверка данных к примеру аутентификация или фильтр данных и т.д.
+    C:\OpenServer\OSPanel\domains\mylar\app\Http\Middleware\ - тут находятся
+    - содание
+        php artisan make:middleware Mymiddleware
+    
+    - его нужно привязать либо ко всем или к конкретному маршруту
+        C:\OpenServer\OSPanel\domains\mylar\app\Http\Kernel.php
+            protected $middleware = []; // посредники для любых запросов
+            protected $routeMiddleware = []; // для конкретных маршрутов
+            +'mymiddle' => \App\Http\Middleware\Mymiddleware::class,
+    - роутер 
+        Route::get('/article/{page}', 'Admin\MyCore@getArticle')->middleware('mymiddle'); // или в массиве []
+    
+    - для вызова в контроллерах в __construct:
+        $this->middleware('mymiddleware');
+    
+    - передать параметр
+        ->middleware('mymiddle:myParam');
+        в посреднике добавить:
+             public function handle($request, Closure $next, $MyParam)
+
+=== ВИДЫ
+    - Путь
+        C:\OpenServer\OSPanel\domains\mylar\resources\views\page.blade.php
+        page.blade.php - с использованием шаблонизатора
+        page.php - без использованием шаблонизатора
+    - В контроллере
+        return view('page');
+        
+        C:\OpenServer\OSPanel\domains\mylar\resources\views\myfirst\page.blade.php
+        return view('myfirst.page');
+
+    - Преременные добавить
+        return view('page', ['key' => 'val']);
+        return view('myfirst.page')->with($data[]);
+        return view('myfirst.page')->withMyvar('MY VAR'); // во view $myvar
+    
+    - Ссылки 
+        <a href="<?php echo route('home')?>">Link Home</a>
+        <a href="<?php echo route('home', ['id'=>10])?>">Link Home</a>
+    
+    - проверка есть ли шаблон
+        if(view()->exists('myfirst.page')){}
+    
+    $path = config('view.paths'); // view - файл в папке config paths - переменная в нем
+    return view()->file($path[0].'/mydir/mydirfile.php');
+
+    - назначить имя шаблону 
+        view()->name('myfirst.page', 'myname');
+        view()->of('myname'); // переменные так само передаются
+// HTML && FORMS
+    - сохранить вид в переменную:
+        $view = view('page', ['key' => 'val'])->render();
+        echo $view;
+
+    - путь к шаблону:
+        view('page', ['key' => 'val'])->getPath();
+    - шаблон
+        {!! Form::open(['url' =>route('home'), 'class' => 'my', 'method' => 'post' ]) !!}
+        {!! Form::hidden('action', 'delete') !!}
+        {!! Form::text('alias', old(alias), ['class' => 'my']) !!}
+        {!! Form::button('Delete', ['class' => 'del', 'type' => 'submit']) !!}
+        {!! Form::close() !!}
+=== ШАБОНИЗАТОР BLADE
+
+        [
+            a) создаем  C:\OpenServer\OSPanel\domains\loc\resources\views\layouts\site.blade.php
+              куда кидаем весь диз шаблона
+                @yield('header')
+                @yield('content')
+            б) создаем  C:\OpenServer\OSPanel\domains\loc\resources\views\site\content.blade.php
+                            - ТУТ HTML
+                        C:\OpenServer\OSPanel\domains\loc\resources\views\site\header.blade.php
+                            - ТУТ HTML
+                        C:\OpenServer\OSPanel\domains\loc\resources\views\site\index.blade.php
+                            @extends('layouts.site')
+
+                            @section('header')
+                                @include('site.header')
+                            @endsection;
+
+                            @section('content')
+                                @include('site.content')
+                            @endsection;
+
+            в) в контроллере return view('site.index');
+        ]
+    
+    - скомпилированные шаблоны в:
+    C:\OpenServer\OSPanel\domains\mylar\storage\framework\views\
+    
+    - должны называтся *.blade.php
+    - ссылки:
+        {!! link_to (route('home', 'Back')) !!}
+    - выделить код в секцию:
+        @section('navbar')  
+        <nav>
+          <ul>
+            <li><a href="#">Text Link</a></li>
+          </ul>
+        </nav>
+        @endsection()
+
+    - вывести код в шаблоне:    
+        @yield('navbar') // он выводит не срау а оворит де что будет выводится :) а в контроллере макет которы насл
+    
+    - в форму добавить:
+        {{ csrf_field() }} 
+    
+    - или :
+        @section('navbar')  
+            <nav>
+              <ul>
+                <li><a href="#">Text Link</a></li>
+              </ul>
+            </nav>
+        @show 
+
+    - данный шаблон наследует функционал от родительского макета в начале файл index.blade.php - дочерний:
+        @extends('mydir.layouts.layout')
+        
+        - переопределили секцию в этом же фале:
+            @section('navbar')
+            @endsection
+        
+        - вывести родительски:
+            @section('navbar')
+                @parent
+            @endsection
+        
+        - пример:
+            @section('footer')
+                @parent
+                <p>Hi man!</p>
+            @endsection
+        
+        - секция в шаблоне где контент вместо него родительский:
+            @yield('content')
+
+            файле index в дочернем:
+            @section('content')
+                <h1>Hello World</h1>
+            @endsection
+            
+            или отдельно содадим файл content
+            @section('content')
+                @include('mydir.content')
+            @endsection
+        
+        - в контроллере обращ только к дочерним
+
+        - передача данных в шаблон hjlbntkmcrb:
+            {{ $title }}
+            
+            {{ тут можем испольовать стандартн функции php или Laravel  }}
+            {{ route('home') }}, {{ date() }} - без ;
+
+        - во всех фалах blade что подкл есть доступ к переменным
+        
+        {{ $script }}  - в HTML сущность 
+        {!! $script !!} - будет скрипт работать (<script>alert()</script>)
+        @{{ $script }} -  выведит {{ $script }}
+        {{ isset($script) ? $script : $title }}   = {{ $script or $title }}
+
+    - Условия 
+        @if(count($list) < 3)
+            в массиые < 3 елементов
+        @elseif()
+        @else    
+        @endif
+
+    - Циклы
+        @for($i = 0; $i < count($list2); $i++) 
+            {{ $list2[$i] }}
+        @endfor
+
+        @foreach($list as $key => $val) 
+            {{ $key.'='.$val }}
+        @endforeach
+
+        @forelse($list as $key => $val) 
+            {{ $key.'='.$val }}
+        @empty
+            No items
+        @endforelse
+
+        @each('mydir.mylist', $list, 'value') 
+            1 - шаблон 2 - массив  3  название переменнной
+            - в шаблоне <h3>{{ $value }}</h3>
+
+=== ДОБАВИТЬ СВОЮ ДИРЕКТИВУ (свою функцию блед)
+    C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php
+        + use Blade; 
+        + public function boot()
+        {
+            Blade::directive('myDir', function($var){
+                return 'My New Blades fnction -> '.$var; 
+            });
+        }
+        - в шаблоне:
+            @myDir('hello')
+
+
+=== Класс Request в контроллере
+    
+    protected $request; 
+    
+    public function __construct(Request $request) {
+       $this->request = $request; 
+    }
+
+    - все: 
+        $this->request->all(); - весб массив
+        $request->input('name', 'по умолчанию'); - начение name
+        $request->has('name') - есть ли
+        $request->only('name', 'site') - только эти
+        $request->except('name', 'site') - убрать из массива  
+        $request->myvar - выведит myvar - сначала post потом get
+        $request->path - путь uri 
+        $request->is('contact/*') - вернет true если uri совпадает с укаанным значением
+        $request->url()
+        $request->fullUrl()
+        $request->method() // post get put delete строка 
+        $request->isMethod('post')  // true если метод post
+        $request->root() // домен 
+        $request->query() // из get
+        $request->header() // массив header 
+        $request->server() // супер глоб массив
+        $request->segments() // массив запроса польователя
+        $request->file('images') // файл формы с именем images
+         пример:
+            if($request->isMethod('post')){
+                // validation
+                $request->flash(); // сохраняет в сессию все данные запроса
+                $request->flush(); // отчистить сессию от данных flash
+                $request->flashOnly('user_name'); // какие записать в сессию
+                $request->flashExcept('user_name'); // какие НЕ записать в сессию
+                /*
+                C:\OpenServer\OSPanel\domains\mylar\app\Http\Kernel.php
+                - подключить посредник для открытия сессии 
+                    в $middleware добавить 
+                    \Illuminate\Session\Middleware\StartSession::class, но и так работает
+                */
+            }
+
+        return redirect()->route('contact')->withInput(); // сохр все содерж поле в сессию    
+
+
+===СЕССИИ + BLADE
+    {{ print_r(Session::all()) }}
+    <input type="text" id="name" value='{{ old('user_name') }}' name="user_name">
+    <?php echo old('user_name'); ?>
+
+=== Класс Response в контроллере
+    use Illuminate\Http\Resonse;
+
+    $view = view('mydir.contact')->with(['title' => 'contacts'])->render();
+    return (new Response($view))->header('Content-Type', 'newTipe')->header('Content-Type2', 'newTipe2');
+    или 
+    return resonse();
+
+    - json
+        return resonse()->json();
+    
+    - файл на скачивание
+        return response()->download('robots.txt', 'my.txt', ['hederOne' => '', 'headerTwo' => '']);
+    
+    - примеры:
+        return response($view)->withHeaders([]);
+
+=== ДОБАВИТЬ СВОЮ ДИРЕКТИВУ (свою функцию Response)
+    C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php
+        + use Response;  // config app.php
+        + public function boot()
+        {
+            Response::macro('myResonse', function($var){
+                return Resonse::make($var); 
+            });
+        }
+        - в контроллере:
+            return response()->myResonse('Hello World');
+
+=== МИГРАЦИЯ БД 
+    Миграция - система контроля версий для бд
+
+    - конфигурация
+        C:\OpenServer\OSPanel\domains\mylar\config\database.php
+    
+    - таблица где хранится инфа
+        'migrations' => 'my_migrations',
+
+    - содание:
+        php artisan make:migration create_articles_table - миграция содает таблицу articles 
+        php artisan make:migration create_articles_table --create=articles - созд миграции под articles
+        в C:\OpenServer\OSPanel\domains\mylar\database\migrations\2018_02_10_123120_create_articles_table.php
+        
+        - класс Schema:: - конструктор таблиц (созд, изм, атрибуты табл
+
+        Schema::create('articles', function (Blueprint $table) {
+            $table->increments('id'); // id INT auto_increment PRIMARY_KEY
+            $table->string('name', 100); // varchar 100 
+            $table->text('text', 100); // text 100 
+            $table->string('img', 255); // varchar 100 
+            $table->timestamps(); // поля время обновления аписи
+        });
+
+        php artisan make:migration change_articles_table --table=articles - созд миграцию с доступом к таблице
+        public function up() // при созд
+        {   $table->string('name')->default('yeah')->change(); // изменит структуру поля
+            if(Schema::hasTable('articles')){ // Schema::hasColumn('alias')
+                Schema::table('articles', function (Blueprint $table) {
+                $table->string('new_name', 100); // varchar 100 добавит в существ табл 
+                });
+            } 
+           
+        }
+
+        public function down() // при отмене
+        {
+            Schema::table('articles', function (Blueprint $table) {
+                $table->dropColumn('new_name');
+            });
+        }
+
+
+        php artisan migrate - содаст таблицы в бд
+        php artisan migrate:rollback  - отменит миграцию на прошлом шаге
+        php artisan migrate:reset  - отменит миграцию всю 
+
+
+        - лучше бать mySQL >5.7
+
+=== DOCTRINE 
+    comoser.json
+    + "doctrine/dbal": "*"
+
+    comoser update
+
+
+=== МЕХАНИМ НАПОЛНЕНИЯ ПОСЕВ ДАННЫМИ для тестиования
+    C:\OpenServer\OSPanel\domains\mylar\database\seeds\DatabaseSeeder.php
+
+    php artisan make:seeder UsersTableSeeder - создание
+
+    public function run()
+    {
+        //1
+        DB::insert("INSERT INTO `articles` (`id`, `name`, `text`, `img`, `created_at`, `updated_at`, `new_name`) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [
+                NULL, 'as2', 'as2', 'as2', NULL, NULL, 'as2'
+            ]);
+        
+        //2
+        DB::table('articles')->insert(
+                [
+                    ['field' => 'value1'],
+                    ['field' => 'value2']
+                ]
+                );
+        //3 
+        
+    }
+
+    php artisan db:seed - выполнит C:\OpenServer\OSPanel\domains\mylar\database\seeds\DatabaseSeeder.php
+        $this->call(UsersTableSeeder::class); // в run
+
+    php artisan db:seed --class=UsersTableSeeder - выполнит C:\OpenServer\OSPanel\domains\mylar\database\seeds\UsersTableSeeder.php
+
+
+=== ПРОСТЫЙ SQL ЗАПРОСЫ
+    $articles = DB::select(" SELECT * FROM `articles` WHERE id = ?", [2]);
+    :id, ['id' => 2
+
+    DB::insert("INSERT INTO `articles` ('name','text') VALUES (?,?)", ['1', 'test']);
+    DB::updete('UPDATE `articles` SET `name` = 1 WHERE id = ?', [2]);
+
+    $id = DB::connection()->getPdo()->lastInsertId();
+    
+    DB::statement('DROP table articles'); // общие запросы
+        
+    dump($articles); // помошник вида
+
+    C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php boot
+    
+    DB::listen(function($query){ // будет выыватся при любом апросе к бае данных 
+            dump($query->sql); // query
+            dump($query->bindings); // params
+        });
+
+    - конструкторы запроса:
+        DB::table('articles')->get(); //"select * from `articles`"
+        DB::table('articles')->first(); //"select * from `articles` limit 1"
+
+        //если очень много записей разбиваем на части 2 - кол зап в одной части
+        DB::table('articles')->orderBy('id')->chunk(2, function($articles){
+        // функция будет выполнятся для каждой порции в отдельности
+            foreach( $articles as $article ){
+                FirstController::addArticles($article);
+            }
+        });
+        protected static $articles;
+        public function addArticles($article){
+            return self::$articles[] = $article;
+        }
+        
+        DB::table('articles')->value('name'); //"select name from `articles` limit 1"
+        DB::table('articles')->pluck('name'); //"select `name` from `articles`"
+        DB::table('articles')->max('id');
+        DB::table('articles')->select('id', 'name')->get(); //"select `id`, `name` from `articles`"
+        DB::table('articles')->distinct()->select('name')->get(); //"select distinct `name` from `articles`"
+
+        $query = DB::table('articles')->select('id');
+        $query->addSelect('name');
+        $query->where('name', '=', 'Вася');    // "select `id`, `name` from `articles` where `name` = ?"
+        $query->where('name', '=', 'Коля', 'or');    // "select `id`, `name` from `articles` where `name` = ? or `name` = ?"
+        $query->where('name', '=', 'Коля');    // "select `id`, `name` from `articles` where `name` = ? and `name` = ?"
+
+        или 
+        $query->where(
+                    ['name', '=', 'Вася'],
+                    ['name', '=', 'Коля', 'or']
+        )->get();
+
+        $query->insert(
+                    ['name' => 'Вася'],
+                    ['name' => 'Коля']
+        );
+
+        DB::table('articles')->where('id', 32)->update(
+            ['name' => 'Вася'],
+            ['name' => 'Коля']
+        );
+
+        DB::table('articles')->where('id', 32)->delete();
+
+        DB::table('users')->leftJoin('posts', 'user.id', '=', 'posts.user_id')->get();  
+       
+        orWhere
+        whereBetween('id', 1, 5) whereNotBetween('id', 1, 5) groupBy() take(4) skip(2)
+
+===МОДЕЛИ
+	php artisan make:model Page (можно создать сразу миграцию --migration или -m)
+	
+	- класс модели:
+		protected $table = 'pages'; // имя таблицы
+		protected $primaryKey = 'id'; 
+		public $incrementing = true;
+		public $timestamps = false; // поля создания и обновления
+	- в контроллере:
+		use App\Page;
+
+		$pages = Page::all(); 
+		
+		foreach($pages as $page){
+			$page->name;
+		}
+ 		// все можно как работать с бд
+		$pages = Page::where('id', '>', 10)->orderBy('name')->take(2)->get();
+		$pages = Page::find(12);
+		$pages = Page::findOrFail(12); // если не надет вернет исключение  
+
+
+
+		- создать
+			$page = new Pages();
+			$page->name = 'new text';
+			$page->save();
+
+                        Pages::create( // нет прав добавить в таблицу с которой работаем
+                            [
+                                'field' => 'some text',
+                            ]
+                        );
+                        - в модели:
+                            protected $fillable = ['name', 'text']; //разрешает добавлять в поля или в контроллере $page->unguard(); - снимает все ораничения 
+                            protected $guarded = ['img']; // '*' не разрешает добавлять в поля
+
+                        Pages::firstOrCreate([ // ищит Вася если нет то содает
+                            'name' => 'Вася',
+                            'text' => 'где бабло?',   
+
+                        ])
+
+		- редактировать
+			$page = Pages::find(12);
+			$page->name = 'new text';
+			$page->save();
+
+                - удалить 
+                    $page = Page::find(12);
+                    $page->delete();
+                    
+                    или
+                        
+                    Page::destroy([21,12]);
+                    
+                    - мягкое удаление  (фремворк делает только пометку что апись удалена)
+                        модель:
+                            Illuminate\Database\Eloquent\SoftDeletes;
+                            class Article extends Model
+                            {
+                                use SoftDeletes;
+                            + protected $dates = ['deleted_at'];
+
+                            Article::withTrashed()->where()...; // вместе с удаленными
+                            Article::withTrashed()->restore()...; // вместе с удаленными + востанавливает
+                            Article::onlyTrashed()->restore()...; // вместе с удаленными + востанавливает
+                            
+                            $article = Article::find(1)    
+                            $article->forceDelete(); // полность удалить без мягкого
+
+
+                            - проверить:
+                            foreach($articles as $article){
+                                if($article->trashed())
+
+                                $article->restore(); // востановить от удаления
+                            }
+                        
+                        migration
+                        public function up()
+                        {
+                            Schema::table('articles', function (Blueprint $table) {
+                                $table->softDeletes();
+                            });
+                        }
+                        public function down()
+                        {
+                            Schema::table('articles', function (Blueprint $table) {
+                               $table->dropColumn('deleted_at');  
+                            });
+                        }
+
+                        php artisan migrate
+
+===СВЯЗИ МЕЖДУ ТАБЛИЦАМИ
+    -OneToOne
+            -содаем миграцию:
+             Schema::create('countries', function (Blueprint $table) {
+                 $table->increments('id');
+                 $table->string('name');
+                 $table->integer('user_id')->unsigned()->default(1);
+                 $table->foreign('user_id')->references('id')->on('users');
+                 $table->timestamps();
+             });
+
+        + модель
+        в моделе Users добавим:
+            public function country(){
+                return $this->hasOne('App\Country'); //связывается с одной записью
+                еще есть
+                return $this->hasOne('App\Country', 'поле в таблице countries user_id', 'поле в таблице users id'); //user_id user - название модели id - поле
+            }
+            
+        в модели Country добавим:
+           public function user(){
+               return $this->belongsTo('App\User');
+           }
+        в контроллере
+            use App\Users
+            $user = User::find(1);
+            dump($user->country); // вернет модель Country
+
+  
+            $country = Country::find(1);
+            dump($country->user);
+    
+    -OneToMany
+                php artisan make:migration add_articles_user_table --table=articles
+
+                $table->integer('user_id')->unsigned()->default(1);
+                $table->foreign('user_id')->references('id')->on('users');
+
+                модель User:
+                    public function articles(){
+                        return $this->hasMany('App\Article'); //связывается с одной записью
+                    }
+                модель Article:
+                    public function user(){
+                        return $this->belongsTo('App\User');
+                    }
+                    
+                контроллер:
+                    $user = User::find(1);
+                    dump($user->articles);
+
+                    $data = Article::find(1);
+                    dump($data->user);
+      
+
+                    или 
+                    
+                    $user->articles()->where('id', 12)->first();
+
+    -ManyToMany 
+        к примеру users - roles
+
+            модель User:
+                    public function roles(){
+                        return $this->belongsToMany('App\Role'); 
+                    }
+            модель User:
+                    public function users(){
+                        return $this->belongsToMany('App\User', 'role_user', 'role_id', 'user_id'); 
+                    }
+            контроллер:
+                    $role = Role::find(1);
+                    dump($role->users);
+
+                    $user = User::find(1);
+                    dump($user->roles);
+
+                    или 
+                    
+                    $user->roles()->where('roles.id', 12)->first();
+
+===Манипуляции со связанными записями
+    - линивая загрузка
+    свяанная информация из таблицы не подгружается пока не обратится к свойству тода будет запрос
+
+    $articles = Article::all();
+    foreach($articles as $article){
+        echo $article->user->name; // + запрос
+    }
+    
+    -жадная загрузка
+    загрузка данных связаных таблиц сразу 2 запроса
+
+    $articles = Article::with('user')->get() ; // with указывает какое модель\своство связанную подгрузить user - метод User - модель 
+    
+    $users = User::with('articles', 'role')->get() ; 
+
+    foreach($articles as $article){
+        echo $article->user->name; // нет запроса
+    }
+
+    или 
+
+    $articles = Article::all();
+    $articles->load('user', 'comment', 'aricles'); // если таблицы связаны то их нужно подгрузить что б на каждого пользователя не bikb новые запросы при выводе
+    foreach($articles as $article){
+        echo $article->user->name; // нет запроса
+    }
+
+    - провертить есть ли связь:
+    $users = User::has('articles', '>=', 3)->get(); // выбрать те что имеют свзанные запиаи >= 3
+    $users = User::has('articles')->get(); // выбрать те что имеют свзанные запиаи 
+
+    -добавления:
+        $users = User::find(1);
+        
+        $article = new Article([
+            'nameField' => 'new record',
+        ]);
+
+        $user->articles()->save($article); // принимает модель
+    
+        или
+
+        $user->articles()->create([ // принимает простой массив
+            'nameField' => 'new record',
+        ]);
+        
+        добавить много
+            $user->articles()->saveMany([
+                new Article(['nameField' => 'new record']),
+                new Article(['nameField' => 'new record2']),
+                new Article(['nameField' => 'new record3']),
+            ]);
+
+    -редактирование связаных записей
+        $users = User::find(1);
+        $user->articles()->where('id', 24)->update(['nameField' => 'new record']);
+
+        OneToOne:
+            $country = Country::find(1);
+            $user = User::find(2);
+            $country->user()->associate($user); // перезаписуем связаные записи
+            $country->save();
+
+        OneToMany:
+            $articles = Article::all();
+            $user = User::find(2);
+
+            foreach($articles as $article){
+                echo $article->user()->associate($user); // изменяет значение внешнего ключа 
+                $article->save();
+            }
+
+        ManyToMany:
+            $user = User::find(2);
+            $role_id = Role::find(2)->id;
+            $user->roles()->attach($role_id); // промежуточная таблица новая запись
+             $user->roles()->detach($role_id); // промежуточная таблица удаляем запись
+
+
+        -изминение свойств моделий
+            
+            читатили: метод выполн опред код когда обращение к своствам модели
+                - в модели:
+                    public function getNameAttribute($value){ // где Name - название своства
+                       return 'Hello' . $value; // $value - начение свойства
+                    }
+            преобразователи: метод выполн опред код когда осущ изменение свойств модели
+                - в модели:
+                    public function setNameAttribute($value){ // где Name - название своства
+                       $this->attributes['name'] = $value; // $this->attributes[] - содержит свойства модели
+                    }
+
+            - массив типов данных модели:
+                protected $casts = [
+                    'name' => 'boolean', // но на самом деле string, модель сама преобразует к типу указаному
+                    'text' => 'array', // если в контроллере присвоят массив то модель => в json и потом обратно в array 
+                ];
+            - в контроллере
+            $article->toArray();// выведет всю модель в аррай    
+            $article->toJson();// выведет всю модель
+
+
+=== ВАЛИДАЦИЯ ДАННЫХ
+
+    - в контроллере 
+
+        public function show(Request $request, $id = false) {
+        
+        if($request->isMethod('post')){
+            
+            $rules = [
+                'name' => 'required|max:10|unique:users,name', // | - правила отделяются  : - параметр см документ очень много :)
+                'email' => 'required|email',
+            ];
+            
+            $this->validate($request, $rules); // если не прошла то будет редирект + все данные сохранятся в сессию
+            
+            dump($request->all());
+            
+        }
+    
+    - для вывода ошибок:
+    C:\OpenServer\OSPanel\domains\mylar\app\Http\Kernel.php 
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class, =>  protected $middleware = [];
+
+    - в шаблоне:
+
+    @if(count($errors) > 0 )
+        <div class='alert alert-danger'>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </div>
+    @endif
+
+    
+    - контроллер ВРУЧНУЮ построение валидатора
+    use Validator;
+    class... 
+    if($request->isMethod('post')){
+            
+            $messages = [];
+            
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+            ], $messages);
+
+            if($validator->fails){ //true если были ошибки
+                return redirect()->route('home')->withErrors($validator)->withInput();
+            }
+    }
+
+    - новый клас для валидации данных разок прописать что и как проверять
+        php artisan make:request ContactRequest
+
+        C:\OpenServer\OSPanel\domains\mylar\app\Http\Requests\ContactRequest.php
+        use App\Http\Requests\ContactRequest;
+
+        public function authorize()
+        {
+            return false; // доступ к маршруту неавториированиому польователю запрещен
+        }
+        public function rules()
+           {
+               return [
+                       'name' => 'required|max:10', // | - правила отделяются  : - параметр
+                       'email' => 'required|email',
+               ];
+           }
+
+        -в контроллере:
+
+           public function show(ContactRequest $contactRequest, $id = false) {
+
+                if($request->isMethod('post')){
+
+                        $messages = [];
+
+                        $validator = Validator::make($request->all(), [
+                            'name' => 'required',
+                        ], $messages);
+
+                        if($validator->fails){ //true если были ошибки
+                            return redirect()->route('home')->withErrors($validator)->withInput();
+                        }
+                }
+            }
+
+        -Сообщения ошибок валидации:
+            C:\OpenServer\OSPanel\domains\mylar\resources\lang\en\validation.php
+
+            'custom' => [
+                'name' => [
+                    'required' => 'Поле обяательно',
+                ],
+                'email' => [
+                    'max' => 'максимально - :max',
+                ],
+            ],
+
+            или:
+            // если написаны тут то приоритет №1
+            в ContactRequest
+                public function messages(){
+                    return [
+                        'required' => 'Поле :attribute обяательно', //для всех
+                        'email.required' => 'Поле :attribute обяательно', //для поля email
+                    ];
+                }
+            
+
+            -в контроллере:
+            $messages = $validator->errors();  // просто что б знать
+            
+            $messages->get('name'); // все сообщения к поля name  
+            $messages->all(); // все сообщения какие прописаны 
+            if($messages->has('name')){
+                $messages->all('<p> :message </p>'); // обернет все сообщения
+            }
+
+            $validator->after(function(){ // любое действие сразу после валидации
+                $validator->errors()->add('name', 'дополнительно');
+            });
+
+===АУТЕНТИФИКАЦИЯ
+    
+
+    C:\OpenServer\OSPanel\domains\mylar\config\auth.php
+
+    -генерация шаблонов аутентификации во view
+        php artisan make:auth
+
+        php artisan route:list - все маршруты
+
+    - добавим на роутер:
+        Route::get('/', 'FirstController@show')->middleware('auth');
+
+        посредники передают управление по цепочке 
+            web - подключает сессии
+            auth - аутентификация 
+
+        // добавляем префикс admin (admin/edit/post или admin/create/post)
+            Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function(){
+                Route::get('/', 'Admin\AdminController@index')->name('admin');
+             });
+
+        или в контроллере:
+            public function __construct(){
+                $this->middleware('auth');
+            }
+
+            ThrottlesLogins -количество неверных попыток
+
+            если вместо email login то после добавления именени в формы 
+                C:\OpenServer\OSPanel\domains\mylar\vendor\laravel\framework\src\Illuminate\Foundation\Auth\AuthenticatesUsers.php
+                public function username()
+                    {
+                        return 'login';
+                    }
+
+===Методы фасада Auth
+
+        -в контроллере:
+            $user = Auth::user(); .. все данные аут пользователя
+        или
+            $user = $request->user();
+
+            if(!Auth:check()) // если не испольовать  $this->middleware('auth');
+                return redirect('/login');
+
+            Auth::id(); // id в таблице
+            Auth::viaRemember(); // true если пользователь выбрал запомнить меня
+
+        или
+            
+            $user = User::find(1);
+            Auth::login($user); // вручную аутентификация
+            или 
+            Auth::guard('session')->login($user); // или web 
+            или 
+            Auth::loginUsingId(7); // или web 
+            
+
+            Auth::guard('session')->logout(); // или web 
+
+            
+
+        - созд свой контроллер:
+        php artisan make:controller Auth\MyAuthController
+
+            public function showLogin() {
+
+                return view('auth.login');
+
+            }
+            public function authenticate(Request $request) {
+
+                $arr = $request->all();
+                $remember = $request->has('remember');
+
+
+                $result = Auth::attempt([  // проверяет есть ли такой польователь
+                    'login' => $arr['login'],
+                    'password' => $arr['password'],   
+                ], $remember);
+
+                if($result){
+                        return redirect()->intended(); // перенаправит куда хотел
+                }
+
+                 return redirect()->back()->withInput($request->only('login', 'remember'))
+                        ->withErrors([
+                            'login' => 'данные не верны',
+                        ]);
+            }
+
+        в маршрутах:
+        //Auth::routes(); - комментим
+        
+        //'middleware' => ['web'] - ПИСАТЬ НЕ НУЖНО ТАМ АВТОМАТОМ ВСЕ РОУТЫ ПРОВЕРЯЮТСЯ
+        //Route::group(['prefix' => 'admin'], function(){
+        Route::group(['prefix' => 'admin', 'middleware' => ['web']], function(){
+ 
+            Route::get('/login', 'Auth\MyAuthController@showLogin')->name('login');
+            Route::post('/login', 'Auth\MyAuthController@authenticate');
+    
+        });
+
+        есть еще баовая аутентификация:
+            'auth.basic' - это как htaccess password
+        Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth.basic']], function(){
+        });
+
+===ПРАВА ПОЛЬОВАТЕЛЯ
+    - рарешение для раных польователей:
+    C:\OpenServer\OSPanel\domains\mylar\vendor\laravel\framework\src\Illuminate\Auth\Access\Gate.php
+    и
+    C:\OpenServer\OSPanel\domains\mylar\app\Providers\AuthServiceProvider.php
+        // нужно создать табл roles и поле в sers role_id
+        
+        - новое разрешение \ правило да = true  нет = false:
+             public function boot()
+                Gate::define('update-post', function (User $user) {
+                    if($user->role->name == 'Admin'){
+                        return true;
+                    }
+                    return false
+                });
+
+        - в контроллере:
+            if(Gate::denise('update-post')) // возвр истину если запрещино
+                return redirect()->back()->with(['message' => 'нет прав']);
+
+            if(Gate::allows('update-post', $article)){ // возвр истину если рарешино 
+                $user->articles()->save($article)
+            }
+
+            if(Gate::forUser(1)->allows('update-post', $article)){ // возвр истину если рарешино  для юзера 
+
+
+
+===ПОЛИТИКА АВТОРИАЦИИ
+
+        - это набор правил для конкретной модели авторизации
+
+            рhp artisan make:policy ArticlePolicy
+
+        - регистрируем политику в 
+            C:\OpenServer\OSPanel\domains\mylar\app\Providers\AuthServiceProvider.php
+            
+            use App\Article;
+            use App\Policies\ArticlePolicy;
+
+
+            protected $policies = [
+                Article::class => ArticlePolicy::class,
+            ];
+        
+        - в ArticlePolicy:
+            
+            use App\User;
+
+            public function add(User $user){ // добавление articles в бд
+                
+                    if($user->role->name == 'Admin'){
+                        return true;
+                    }
+                    return false
+            }
+            public function update(User $user, Article $article){ // изменение articles в бд
+                        if($user->id == $article->ser_id){ return true;}
+                        else{ return false;}
+
+            }
+
+            public function before(User $user){ // вызывается всегда раньше других методов
+                // и он в приоритете
+                if($user->role->name == 'Admin'){
+                    return true;
+                }
+                return false
+            }
+
+         - в контроллере:
+                $article = new Article; // пусто обьект
+                if(Gate::denise('add', $article)) // возвр истину если запрещино
+                        return redirect()->back()->with(['message' => 'нет прав']);
+
+
+                $article = Article::find(1);         
+                if(Gate::allows('update', $article)){ // возвр истину если рарешино 
+                    $user->articles()->save($article)
+                }
+
+                или
+                $article = new Article; // пусто обьект 
+                if($request->user()->cannot('add', $article)) // или can возвр истину если запрещино
+                        return redirect()->back()->with(['message' => 'нет прав']);
+
+
+                еще есть вариант с возвратом респонс 403:
+                     $article = Article::find(1); // пусто обьект
+                     $this->autorize('add', $article);
+                     или 
+                     $user = Auth::user()
+                     $this->autorizeForUser($user, 'add', $article);
+
+        - в шаблоне:
+            @can('add', $article)
+                добавить
+            @else
+                не добавить
+            @endcan;
+
+
+===СЕССИИ
+    - вкл: 
+        C:\OpenServer\OSPanel\domains\mylar\app\Http\Kernel.php
+        'web' => [ \Illuminate\Session\Middleware\StartSession::class,]
+     
+    -настройка:
+        C:\OpenServer\OSPanel\domains\mylar\config\session.php
+             'expire_on_close' => true, - будет пропадать сессия при закрытии браузера 
+
+    - если хранить в бд, то:
+        'driver' => env('SESSION_DRIVER', 'database'), 
+        // начение по умолчанию, 
+        //а исходное в C:\OpenServer\OSPanel\domains\mylar\.env
+        
+        php artisan session:table // миграция 
+        php artisan migrate
+    
+    -в бд медленно в file быстрее
+
+    -в конторллере:
+        public function store(Request $request) {
+        $request->session()->get('key', 'default');
+        $request->session()->all();
+        $request->session()->put('key', 'value'); //если key.first - массив
+        $request->session()->has('key');
+
+        // если добавить значение в массив:
+            $request->session()->put('key.first', 'value');
+            $request->session()->push('key.second', 'value'); // будет добавлятся постоянно начение в second
+        
+        ИЛИ 
+            session('key'); // получить значение
+            session(['key2' => 'val']); // добавить значение
+
+    - в шаблоне:
+        {{ dump(Session::all()) }}  {{ session('var') }}
+
+    - удаляем сесссию
+        SESSION::forget('key');
+        SESSION::flush(); // полностью
+        SESSION::pull('key'); // вернет и удалит ключ сессию
+        SESSION::flash('key', 'val'); // создаст и удалит ключ сессию на один апрос
+        SESSION::reflash() // продлены flash еще на один запрос
+
+===Обработка событий
+    - реистрируем обрабочик
+    C:\OpenServer\OSPanel\domains\mylar\app\Providers\EventServiceProvider.php
+    
+    protected $listen = [
+        'App\Events\onAddArticleEvent' => [
+            'App\Listeners\addArticleEventListener',
+        ],
+    ];
+    ИЛИ -->
+     public function boot(){ // тут можно арегить обработчика для события
+         Event::listen('onAddArticleEvent', function ($article, $user) {
+             Log::info('Article save in DB', [$user => $article])
+        }
+    // в контроллере:
+         Event::fire('onAddArticleEvent', [$article, $user]);
+    <--
+    
+    php artisan event:generate  
+
+- класс события:
+C:\OpenServer\OSPanel\domains\mylar\app\Events\onAddArticleEvent.php
+    public $user_name;
+    public $article_name;
+
+    public function __construct(Article $article, User $user)
+    {
+        $this->user_name = $user->name;
+        $this->article_name = $article->name;
+    }
+
+- класс обработчик:
+C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
+    public function handle(onAddArticleEvent $event)
+    {
+        Log::info('Article save in DB', [$event->user_name => $event->article_name])
+    } 
+
+- в контроллере выкинуть событие:
+    Event::fire(new onAddArticleEvent($article, $user));
+
+   или
+        event(new onAddArticleEvent($article, $user));
+
+
+ИЛИ есть стандартные события модели рег в:
+в C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php 
+    -можно зареистр слушателя для события модели (у кажд модели есть стандартные события см литературу): 
+
+    public function boot()
+    {
+        Article::created(function(Article $article){
+            Log::info('Article save in DB', [$article->user->name => $article->article_name])
+        });
+
+
+===Локализация
+
+        C:\OpenServer\OSPanel\domains\mylar\resources\lang\
+
+
+        return [ 
+                'welcome' => 'Добропожаловать :name',
+                'apple' =>  'яблоко|яблока|яблок' // варианты перевода
+                'apples' =>  '{0}var1|[1,19]Var2|[22,inf]var3',  
+                ];
+
+
+        C:\OpenServer\OSPanel\domains\mylar\config\app.php
+             'locale' => 'en',
+             'fallback_locale' => 'en', // альтернативная локализация 
+
+
+        -в контроллере:
+        //[ 'welcome' => 'Добропожаловать :name' ];
+        Lang::get('messages.welcome', ['name' => 'Ben']); //messages - имя файла , key - имя ячеки
+        Lang::choice('messages.apple', 1); // или 22 и т.д.
+        Lang::has('messages.apple')
+
+
+
+===КОНТРАКТЫ
+
+    -это интерфес "КОНТРАКТ"
+        C:\OpenServer\OSPanel\domains\mylar\app\Helpers\Contracts\SaveSt.php - любой сам пиши
+    
+        namespace App\Helers\Contracts;
+        use Illuminate\Http\Request;
+        use App\User;
+
+        interface SaveSt {
+
+            public static function save(Request $request, User $user);
+
+            public function checkData($array);
+
+        }
+    
+    -реализатор контракта: может быть много а контракт один
+        C:\OpenServer\OSPanel\domains\mylar\app\Helpers\SaveEloqentOrm.php
+
+        namespace App\Helers;
+
+        use Illuminate\Http\Request;
+        use App\User;
+        namespace App\Helers\Contracts\SaveStr;
+
+        class SaveEloqentOrm implements SaveStr{
+        
+            public static function save(Request $request, User $user){
+                $obj = new self;
+                $data = $obj->checkData($request->only('name', 'text'));
+
+                $user->articles()->create($data);
+            }
+
+            public function checkData($array){
+                return $array; 
+            }
+        }
+
+
+===СЕРВИС ПРОВАЙДЕР
+    
+    - для первоначально загрузки функционала
+    - реистрация классов
+    - политик, событий, шаблонизаторы 
+    - привяка контракта к исполнителю
+    
+    -при загруке laravel опрашует все доступные провадеры и вызывает метод register каждого провайдера
+    таким обраом в сервис контенере рег все классы
+
+    Создание своего провайдера (будет регистрировать реализаторов контракта SaveStr):
+
+    php artisan make:provider SaveStrServiceProvider
+
+    C:\OpenServer\OSPanel\domains\mylar\app\Providers\SaveStrServiceProvider.php
+
+    namespace App\Providers;
+
+    use Illuminate\Support\ServiceProvider;
+    use App\Helers\SaveEloqentOrm;
+    use App\Helers\SaveFile;
+
+    class SaveStrServiceProvider extends ServiceProvider
+    {
+
+        public function boot()
+        {
+            //
+        }
+
+        // связуем реализатор с контрактом
+        public function register()
+        {
+            $this->app->bind('App\Helers\Contracts\SaveSt', function(){ // привязка кажды выов - новы обьект
+                return new SaveEloqentOrm;
+                //return new SaveFile;
+            });
+            
+            или
+
+            $this->app->bind('App\Helers\Contracts\SaveSt', 'App\Helers\SaveEloqentOrm');
+
+            или 
+
+            $this->app->singleton('App\Helers\Contracts\SaveSt', function(){ // привязка лучше сингелтон
+                //return new SaveEloqentOrm;
+                return new SaveFile;
+            });
+
+            или 
+            $obj = new SaveEloqentOrm;
+            $this->app->instance('App\Helers\Contracts\SaveSt', $obj);
+
+
+
+            // доступ внутри провадера :
+            $this->app['App\Helers\Contracts\SaveSt'];
+            или 
+            $this->app->make('App\Helers\Contracts\SaveSt'); 
+            dd(); - dump 
+        }
+    }
+
+    - реистр нашего провайдера:
+        C:\OpenServer\OSPanel\domains\mylar\config\app.php
+
+     'providers' => [ App\Providers\SaveStrServiceProvider::class];
+
+     - в контроллере:
+         public function store(Request $request, SaveSt $saveSt) {
+         // laravel обратится и найдет что к 'App\Helers\Contracts\SaveSt' привязан обьект return new SaveEloqentOrm;
+         и тут работаем с методами уже SaveEloqentOrm
+
+        $saveSt->save($request, Auth::user());
+
+
+===Сервис-контейнер
+    - хранит инфу о зареистр сервисах
+
+    через зависимость:
+        save(Request $request, SaveSt $saveSt) 
+    или:
+        $var = App::make('App\Helers\Contracts\SaveSt');
+        или App::make('SaveSt'); если $this->app->singleton('SaveSt',  - просто строка, но так лучше не делать
+        $var->save($request, Auth::user());
+
+
+
+===ФАСАДЫ
+    это статические интерфесы зарег в серв контейнере 
+
+    C:\OpenServer\OSPanel\domains\mylar\app\Helpers\Facades\SaveSt.php
+
+    namespace App\Helers\Facades;
+    
+    use Illuminate\Support\Facades\Facade;
+
+    class SaveSt extends Facade{
+
+        protected static function getFacadeAccessor() { 
+            // обьяателен  к какому зарег классу и контенера вы обращаетесь с помоще этоо фасада 
+            // вовращает ключ ячейки сервис - контейнера
+            return 'savest';
+        }
+
+    }
+    
+    C:\OpenServer\OSPanel\domains\mylar\app\Providers\SaveStrServiceProvider.php
+
+        $this->app->bind('savest', function(){
+            return new SaveEloqentOrm;
+        });
+
+
+    - псевдоним для фасада:
+
+        C:\OpenServer\OSPanel\domains\mylar\config\app.php
+
+        'aliases' => [
+          'SaveSt' => App\Helers\Facades\SaveSt::class,
+        ]
+
+    - в контроллере:
+
+        use SaveSt; 
+
+        SaveSt::save();
+
+===ПОЧТА
+C:\OpenServer\OSPanel\domains\loc\config\mail.php
+C:\OpenServer\OSPanel\domains\loc\.env
+    - на шаблоне:
+        @if(count($errors) > 0 )
+            <div class='alert alert-danger'>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </div>
+        @endif
+    -в контроллере:
+        $data = $request->all();
+        $result = Mail::send('site.email', ['data' => $data], function($message) use ($data) {
+            $mail_admin = env('MAIL_ADMIN');    
+            $message->from($data['email'], $data['name']);
+            $message->to($mail_admin)->subject('тема');
+        }); //site.email - шаблон во view 
+        
+    -в email.blade.php: // site - каталог
+            <h3>{{ $data['name']}} </h3>
+        C:\OpenServer\OSPanel\userdata\temp\email
+
+
+        if($result){ redirect()->route('home')->with('status', 'mail is good' )}
+===PART TWO=== 
+
+
+===ПАКЕТЫ
+    https://laravelcollective.com/docs/master/html
+===шаблон
+    https://www.themezy.com/free-website-templates/97-unique-free-responsive-website-template
+
+
+class People extends Model
+{
+    protected $table = 'peoples'; // если таблица имеет другое имя чем модель
+}
+
+
+{!! Html::image('/assets/img/'.$page->images, 'title', ['class' => 'my'])  !!}
+{!! Html::link(route('edit', ['page' => $page->id]))  !!}
+<a href="{{ route('home', ['alias' => $page->alias ]), $page->name}}">aaa</a>
+
+ $tags = DB::table('portfolios')->distinct()->pluck('filter');
+
+
+'middleware' => 'web' - там для форм проверка {{csrf_field()}} // она по умолчанию 
+
+===ФАЙЛЫ
+
+    if($request->hasFile('images'))
+        $file = $request->file('images');
+        $file = $request->images;
+        $path = $request->images->store('mufolder');
+
+        $page = new Page($input);
+        или 
+        $page->fill($input);
+        
+
+        $page->save();
+	или 
+	$page->update(); 
+
+
+если в маршруте передается идентификатор, то в методе контроллера можно (Page $page)
+и не надо find так как фрамворк сам надет сразу в переменно page 
+
+{{ method_field('DELETE') }} // inut type hidden name _method value delete
+
+
+if($request->isMethod('delete')){ $page->delete(); }
+
+
+
+
+===PART THREE===
+
+1) сменить пространство имен:
+    php artisan app:name Hi
+
+2) делаем мирации:
+    php artisan make:migration CreatePotfoliosTable --create=portfolios
+        $table->string('alias', 150)->unique();
+        $table->string('title', 255);
+        $table->text('text');
+        $table->intager('parent_id');
+        $table->intager('parent_id')->default(0);
+
+    php artisan migrate
+
+3) делаем привяку таблиц:
+    php artisan make:migration ChangeArticlesTable --table=articles
+
+        Schema::table('articles', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned()->default(1);
+            $table->foreign('user_id')->references('id')->on('users'); //внешний ключ 
+            $table->integer('category_id')->unsigned()->default(1);
+            $table->foreign('category_id')->references('id')->on('categories'); //внешний ключ 
+        });
+
+4) php artisan make:auth
+    -создаст http://hi/register
+
+5) Routes 
+
+GET POST PUT DELETE
+	resource()
+	file_get_contents('php://input'); // получает get и post не зависимо от php.ini
+
+cURL позволяет легко выполнять любые HTTP методы для нужного ресурса.
+
+// будут все маршруты методов :
+Route::resource('/', 'IndexController');
+или
+Route::resource('/', 'IndexController', [
+                                            'only' => ['index'],
+                                            'names' => [
+                                                'index' => 'home',
+                                            ],
+                                        ]);
+
+6) содадим контроллер типа ресурс
+
+php artisan make:controller IndexController --resource
+
+7) содадим родительски контроллер для всех контроллеров пользовательской части сайта :
+class IndexController extends SiteController
+
+8) - view/pink/index.blade.php // шаблон 
+
+- env THEME=pink
+
+
+- SiteController:
+    protected $p_rep;// обьект класса портфолио репозиторий
+    protected $s_rep;// слайдер
+    protected $a_rep;// статьи
+    protected $m_rep;// меню
+    protected $template;// имя шаблона для конкретной стр.
+    protected $vars;// массив переменных
+    protected $bar = FALSE;// есть ли сайт-бар
+    protected $contentRightBar = FALSE; 
+    protected $contentLeftBar = FALSE;
+
+
+- IndexController:
+    public function __construct() {
+        
+        parent::__construct();
+        
+        $this->bar = 'right';
+        $this->template = env('THEME').'.index';
+    }
+    public function index()
+    {
+        return $this->renderOutput();
+    }
+
+- в каталоге pink - layouts // макет проекта site.blade.php 
+{{ asset(env('THEME')) }}/images/favicon.ico
+- index:
+@extends(env('THEME').'.layouts.site')
+
+- разбиваем главны макет на части, 
+в тех местах где выризали  @yield('navigation'):
+во view для контроллера переопределяем:
+@section('navigation')
+можо include('navigation') 
+или 
+{!! $navigation !!} //переменная в онтроллере
+@endsection()
+
+
+- php atisan make:model  Menu
+
+- в app содадим папу Repositories + file MenusRepository Repository - наш класс
+ В REPOSITORY вносим лоику работы с БД
+ 
+class MenusRepository extends Repository{
+
+
+
+есть пакет:
+composer require lavary/laravel-menu 
+
+// просто что б нать
+// Замыкания могут принимать обычные аргументы
+$message = 'мир';
+$example = function ($arg) use ($message) {
+    var_dump($arg . ', ' . $message);
+};
+$example("привет"); // привет мир
+
+@include(env('THEME').'.customMenuItems', ['items' => $menu->roots()]) // тольо родительские
+
+@foreach($items as $item)
+    <li {{ URL::current() == $item->url() ? 'class=active' : ''}} ><a href="{{ $item->url() }}">{{ $item->title }}</a></li>
+    @if($item->hasChildren())
+        <ul class="sub-menu">
+            @include(env('THEME').'.customMenuItems', ['items' => $item->children()])
+        </ul>
+    @endif
+@endforeach
+
+
+Локализация
+C:\OpenServer\OSPanel\domains\hi\resources\lang\ru\
+C:\OpenServer\OSPanel\domains\hi\config\app.php  'locale' => 'ru',
+{{ trans('ru.latest_project') }}
+
+
+пагинация
+
+$users = DB::table('users')->paginate(15);
+{{ $users->links() }}
+в repository 
+if($pagination) {
+    return $this->check($builder->paginate(Config::get('settings.paginate')));
+}
+
+
+если в одном материале используют несколько моделей то нужно подгружать:
+
+$articles->load('model1', 'model2', 'model3'); // жадгая загруза выгодно когда много записей и связей
+$articles->model1->load('model12')
+
+
+если разные макеты а страница 404 одна:
+app\Excetions\Handler.php
+ метод render:
+
+	if($this->isHttpException($e)){
+	$status = $e->getStatusCode();
+	
+	if($status == 404)
+ 		
+		return response()->view(env('THEME').'.404', []);
+
+	}
+// тут можно и логирование сделать
+
+
+Базовый контроллер в нем все переменные и проверка на авторизацию в остальных контр вызов parent::__construct();
+
+Базовый :
+__construct(){
+	if(!Auth::user())
+		abort(403);
+
+}
+
+
+function renderOutput(){
+	$this->vars = array_add($this->vars, 'title', $this->title);
+	$menu = $this->getMenu();
+
+	$navigation = view(env('THEME').'.admin.navigation')->with('menu', $menu);
+	$this->vars = array_add($this->vars, 'navigation',  $navigation);
+
+	if($this->content){
+		$this->vars = array_add($this->vars, 'content',  $this->content);
+	}
+
+	$footer = view(env('THEME').'.admin.footer')->render();
+	$this->vars = array_add($this->vars, 'footer',  $footer);
+
+	return view($this->template)->with($this->vars);
+	
+} //
+
+function getMenu(){
+	Menu::make('adminMenu', function($menu){ // пакет нужно установить
+		$this->add('статьи', ['route' => 'admin.articles.index']);
+	});
+}
+
+Другой (IndexController):
+
+	__construct(){
+		parent::__construct();
+
+		if(Gate::denies('VIEW_ADMIN')) { // права VIEW_ADMIN - permissions таблица можно  Gate::denies('VIEW_ADMIN', new \Hi\Aticle)
+			abort(403); 
+		}
+		/*
+			App\Ptoviders\AuthServerProvider:
+			
+			boot(){
+				$gete->define('VIEW_ADMIN', function($user){
+					return $user->canDo(['VIEW_ADMIN', 'ADD_ARTICLES'], true); // наш метод модели User true - все права  false - хотя бы одно право	
+				});
+			}
+		*/
+		/*	модель User
+			canDo($pemission, $require = false){
+				if(is_array($pemission)){
+					foreach($pemission as $permName){
+						$permName = $this->canDo($permName);
+						if($permName && !$require){
+							return true;
+						}elseif(!$permName && $require) retun false;
+					}
+				}
+				else
+					//this->roles()->get() тоже что и $this->roles получаем все роли
+				foreach($this->roles as $role)
+					foreach($role->permission()->get() as $perm)  // или $role->permission 
+						if(str_is($pemission, $perm->name))
+					endforeach;
+				endforeach;	
+			}
+		*/
+
+		$this->temlate = env('THEME').'.admin.index';
+
+
+	}
+	
+	index(){
+		$this->title = 'панель админа';
+		$this->renderOutput();
+	}
+
+Вид в layouts + admin.blade.php 
+
+
+ПРАВА И ПРИВЕЛЕГИИ
+
+создаем миграцию roles + permissions + permission_role + user_role
+
+
+МОДЕЛИ
+	marke:model Role
+
+	- модель User связывается с моделью Role
+	
+		public function roles(){
+			return $this->belongsToMany('Hi\Role', 'user_role'); //'Hi\Role - модель / user_role - таблица
+		} 
+
+	- модель Role
+		public function users(){
+			return $this->belongsToMany('Hi\Users', 'users'); 
+		} 
+		public function permission(){
+			return $this->belongsToMany('Hi\Permission', 'permission_role'); 
+		} 
+
+	- модель Permission связывается с моделью Role
+	
+		public function roles(){
+			return $this->belongsToMany('Hi\Role', 'permission_role'); 
+		} 
+
+РЕПОЗИТОРИИ:
+	Контроллер:
+		Aticles 
+			__construct(Aticlesepository $a_rep)
+
+
+		в контроллере getArticles()
+			return $this->a_rep->get();
+
+
+
+в контр create()
+	if(Gate::denies('save', new \Hi\Article))
+		
+		abort(403)
+
++ клас политики безопасности:
+
+	php artisan make:policy ArticlPolicy
+
+	public function save(User $user) 
+		
+		return $user->canDo('ADD_ARTICLES')
+
+
++ регистр политику в AuthServicePovider
+
+	$policies = [ // список политик которые привязаны к определенным моделям
+		Artivle::class => ArticlPolicy::class	
+	]
+
+
+===Laravel Collective пакет для form просто пает...
+
+	пример 
+
+	$categories = Category::select(['title', 'alias', 'id']);
+	$categories->where('id',15)->fist()->title;
+		
+
+РЕДАКТИРОВАНИЕ
+
+--- при resource route
+
+	метод store делает сохранение
+
+	store(Request $request) или (ArticleRequest $articleRequest)
+
+
+	$result = $this->a_rep->addArticle($articleRequest);
+
+	if(is_array($result) && !empty($result['error']))
+		return back()->with($result)
+
+	else
+		return redirect('/admin')->width($result);
+
+
+--- addArticle() в репозитории
+
+	addArticle($request)
+	
+		if(Gate::denies('save', $this->model)) // политика безопасности
+			abort(403) 
+
+		$data = $request->except('_token', 'image')
+
+		if(!$data)
+			return ['error' => 'нет'];
+
+
+--- создаем класс валидации ArticleRequest
+	artisan make:request ArticleRequest 
+	
+	//переопределяем 
+	
+	getValidatorInstance()
+		$validator = parent::getValidatorInstance();
+
+	// если поле может быть не всегда:
+	$validator->sometimes('alias', 'unique|required|max:25', function($input){
+		return !empty($input->alias)
+	});
+	return $validator;
+
+	rules()
+
+	
+	return [
+		'title' => 'required|max:25',
+		...
+	]
+
+	autorize() // нужен ли авторизация + тут проверим есть ли права
+
+	return \Auth::user()->canDo('ADD_ARTICLES');
+
+если нужен метод с кирилицы в латиницу то в репозиторрии делаем метод сами:
+
+	transliterate($string){ сами пишем :) str_replace()}
+
+
+если нужно перезаписать ячейку в request 
+	$request->merge(['alias' => 'myAlias'])
+	$request->flash(); // сохраняем все данные в сессию что б после редиректа данные в форме
+
+
+РЕСАЙЗ ИЗОБРАЖЕНИЯ
+	расширение intervention image для laravel
+в репозитории
+
+if($request->hasFile('image'))
+	$img = $request->file();// возвр обьект файла
+
+if($img->isValid())
+...
+$this->model->fill($data); // заполняем модель данными
+
+if($request->user()->articles()->save($this->model)) // сохр модель для данного польователя
+
+
+РЕДАКТИРОВАНИЕ
+
+	контроллер
+		update(Article $article)
+
+		if(Gate::denise())
+
+так как мы через alias а не через id то в RouteServiceProvider
+
+	boot() // связали маршрут с моделью
+		$route->bind('articles', function($value){
+			return \Hi\Article::where('alias', $value)->first()
+		});
+
+
+
+метод sync и detach - синхронизация свяей табл посмотри
+
+виджет акардион динамические вкладки
+
+app('route') app('route')
+
+$chield = self::where('parent', $this->id) // в модели выбор всех дочерних теущ  
+	
