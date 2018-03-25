@@ -1,10 +1,10 @@
-===УСТАНОВКА 
+===РЈРЎРўРђРќРћР’РљРђ 
     composer global require "laravel/installer"
     cd domains
 	C:\Users\Alhimik\AppData\Roaming\Composer\vendor\bin
     laravel new blog
 
-===ПОЛЕЗНОСТИ
+===РџРћР›Р•Р—РќРћРЎРўР
 dump();// view heler
 abord(404); 
 strip_tags()
@@ -12,36 +12,36 @@ public_path()
 
 
 
-===”айлы
-    C:\OpenServer\OSPanel\domains\mylar\.env - переменные среды разработки все попадает в $_ENV['KEY']
-    C:\OpenServer\OSPanel\domains\mylar\config\app.php - предоставляет доступ к .env и уст поумолчанию
-    C:\OpenServer\OSPanel\domains\mylar\config\database.php - настрока базы данных
+===вЂќР°Р№Р»С‹
+    C:\OpenServer\OSPanel\domains\mylar\.env - РїРµСЂРµРјРµРЅРЅС‹Рµ СЃСЂРµРґС‹ СЂР°Р·СЂР°Р±РѕС‚РєРё РІСЃРµ РїРѕРїР°РґР°РµС‚ РІ $_ENV['KEY']
+    C:\OpenServer\OSPanel\domains\mylar\config\app.php - РїСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚ РґРѕСЃС‚СѓРї Рє .env Рё СѓСЃС‚ РїРѕСѓРјРѕР»С‡Р°РЅРёСЋ
+    C:\OpenServer\OSPanel\domains\mylar\config\database.php - РЅР°СЃС‚СЂРѕРєР° Р±Р°Р·С‹ РґР°РЅРЅС‹С…
 
-===КОНСОЛЬ
-    php artisan list - список доступных команд
+===РљРћРќРЎРћР›Р¬
+    php artisan list - СЃРїРёСЃРѕРє РґРѕСЃС‚СѓРїРЅС‹С… РєРѕРјР°РЅРґ
     php artisan help app:name
 
-===МАРШРУТИЗАТОР
-    C:\OpenServer\OSPanel\domains\mylar\routes\web.php - маршруты
+===РњРђР РЁР РЈРўРР—РђРўРћР 
+    C:\OpenServer\OSPanel\domains\mylar\routes\web.php - РјР°СЂС€СЂСѓС‚С‹
     Route::get('/', function () { return view('welcome');});
-    Route::post('/action-form', function () {print_r($_POST);}); // для пост
-    Route::match(['get', 'post'], '/', function () {}); // для get и post
-    Route::any('/', function () {}); // для всех 
+    Route::post('/action-form', function () {print_r($_POST);}); // РґР»СЏ РїРѕСЃС‚
+    Route::match(['get', 'post'], '/', function () {}); // РґР»СЏ get Рё post
+    Route::any('/', function () {}); // РґР»СЏ РІСЃРµС… 
 
-    Route::get('/page/{id}/{cat}', function ($id, $cat) { // передача параметров обяательно
+    Route::get('/page/{id}/{cat}', function ($id, $cat) { // РїРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ РѕР±СЏР°С‚РµР»СЊРЅРѕ
     echo $id.'-'.$cat;
     }); 
-    Route::get('/page/{id?}/{cat}', function ($id = null, $cat) { // передача параметров НЕ обяательно
+    Route::get('/page/{id?}/{cat}', function ($id = null, $cat) { // РїРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ РќР• РѕР±СЏР°С‚РµР»СЊРЅРѕ
     echo $id.'-'.$cat;
     });
-    Route::get('/page/{id}', function ($id) { // передача параметров регулярные
+    Route::get('/page/{id}', function ($id) { // РїРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ СЂРµРіСѓР»СЏСЂРЅС‹Рµ
     })->where('id','[0-9]+'); // ->where(['id' => '[0-9]+'], 'cat' => '[A-Za-z]+']);
     
-    - для того что б не писать для каждого маршрута и id параметра рег выражение:
-        C:\OpenServer\OSPanel\domains\mylar\app\Providers\RouteServiceProvider.php =>  boot() => + Route::pattern('id', '[0-9]+'); или Route::patterns(['id' => '[0-9]+']);
+    - РґР»СЏ С‚РѕРіРѕ С‡С‚Рѕ Р± РЅРµ РїРёСЃР°С‚СЊ РґР»СЏ РєР°Р¶РґРѕРіРѕ РјР°СЂС€СЂСѓС‚Р° Рё id РїР°СЂР°РјРµС‚СЂР° СЂРµРі РІС‹СЂР°Р¶РµРЅРёРµ:
+        C:\OpenServer\OSPanel\domains\mylar\app\Providers\RouteServiceProvider.php =>  boot() => + Route::pattern('id', '[0-9]+'); РёР»Рё Route::patterns(['id' => '[0-9]+']);
     
-    - если нужно обьединить маршруты к примеру для admin:
-        Route::group(['prefix' => 'admin'], function () { // можно ['prefix' => 'admin/{id}']
+    - РµСЃР»Рё РЅСѓР¶РЅРѕ РѕР±СЊРµРґРёРЅРёС‚СЊ РјР°СЂС€СЂСѓС‚С‹ Рє РїСЂРёРјРµСЂСѓ РґР»СЏ admin:
+        Route::group(['prefix' => 'admin'], function () { // РјРѕР¶РЅРѕ ['prefix' => 'admin/{id}']
             Route::get('/page/create', function () {
                 echo 'Page/create';
             });
@@ -49,20 +49,20 @@ public_path()
                 echo 'Page/edit';
             });
         });
-    - Тип контроллер
-        - создает автоматом маршруты для методов контроллера
+    - РўРёРї РєРѕРЅС‚СЂРѕР»Р»РµСЂ
+        - СЃРѕР·РґР°РµС‚ Р°РІС‚РѕРјР°С‚РѕРј РјР°СЂС€СЂСѓС‚С‹ РґР»СЏ РјРµС‚РѕРґРѕРІ РєРѕРЅС‚СЂРѕР»Р»РµСЂР°
         Route::controller('/about', 'Dir\FirstController');
-        // задать имена:
+        // Р·Р°РґР°С‚СЊ РёРјРµРЅР°:
         Route::controller('/about', 'Dir\FirstController', ['methodName' => 'Name']);
-        в контроллере есть методы getIndex anyBlabla getCreate postIndex // префикс соответствует методу 
+        РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ РµСЃС‚СЊ РјРµС‚РѕРґС‹ getIndex anyBlabla getCreate postIndex // РїСЂРµС„РёРєСЃ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РјРµС‚РѕРґСѓ 
         url:
             /about - getIndex
             /about/create - getCreate
-            post запрос -  postIndex
+            post Р·Р°РїСЂРѕСЃ -  postIndex
 
 
-===ФОРМИРОВАНИЕ ССЫЛОК
-    - нужно содать роутер:
+===Р¤РћР РњРР РћР’РђРќРР• РЎРЎР«Р›РћРљ
+    - РЅСѓР¶РЅРѕ СЃРѕРґР°С‚СЊ СЂРѕСѓС‚РµСЂ:
         Route::get('/my', function () {
             return view('welcome');
         })->name('home');
@@ -70,131 +70,131 @@ public_path()
     Route::get('/page/create', function () {
         echo route('home');
     });
-    - редирект:
+    - СЂРµРґРёСЂРµРєС‚:
         return redirect()->route('home');
         return redirect()->action('ContactController@show')->with();
-        return redirect()->route('home', ['id' => 25]); // передача параметров
-===ВИДЫ
-    C:\OpenServer\OSPanel\domains\mylar\resources\views\ - виды
+        return redirect()->route('home', ['id' => 25]); // РїРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ
+===Р’РР”Р«
+    C:\OpenServer\OSPanel\domains\mylar\resources\views\ - РІРёРґС‹
 
-=== Добратся до конфига
+=== Р”РѕР±СЂР°С‚СЃСЏ РґРѕ РєРѕРЅС„РёРіР°
     config(['app.locale' => 'America/Chicago']);
     echo config('app.locale');
-    echo env('APP_ENV'); // до переменных окружения
-    config('app.locale'); // верент  'locale' => 'en'
+    echo env('APP_ENV'); // РґРѕ РїРµСЂРµРјРµРЅРЅС‹С… РѕРєСЂСѓР¶РµРЅРёСЏ
+    config('app.locale'); // РІРµСЂРµРЅС‚  'locale' => 'en'
 
-=== ПСЕВДОНИМ
+=== РџРЎР•Р’Р”РћРќРРњ
     C:\OpenServer\OSPanel\domains\mylar\config\app.php // aliases Route::
 
-=== КОНТРОЛЛЕР
+=== РљРћРќРўР РћР›Р›Р•Р 
     C:\OpenServer\OSPanel\domains\mylar\app\Http\Controllers
-    - Создать через консоль
-        идем в папку сайта
-        рhp artisan make:controller My
-        рhp artisan make:controller Admin\My // Admin - каталог
+    - РЎРѕР·РґР°С‚СЊ С‡РµСЂРµР· РєРѕРЅСЃРѕР»СЊ
+        РёРґРµРј РІ РїР°РїРєСѓ СЃР°Р№С‚Р°
+        СЂhp artisan make:controller My
+        СЂhp artisan make:controller Admin\My // Admin - РєР°С‚Р°Р»РѕРі
         
-    - Роутер
-        Route::get('/about', 'FirstController@show'); // show это метод
-        если:
+    - Р РѕСѓС‚РµСЂ
+        Route::get('/about', 'FirstController@show'); // show СЌС‚Рѕ РјРµС‚РѕРґ
+        РµСЃР»Рё:
             C:\OpenServer\OSPanel\domains\mylar\app\Http\Controllers\Dir
-        то:
-            Route::get('/about', 'Dir\FirstController@show'); // show это метод @getPages
+        С‚Рѕ:
+            Route::get('/about', 'Dir\FirstController@show'); // show СЌС‚Рѕ РјРµС‚РѕРґ @getPages
     
-    - Параметры в
+    - РџР°СЂР°РјРµС‚СЂС‹ РІ
         Route::get('/about/{id}', 'FirstController@show');
         public function show($id){
           echo $id;  
         }
     
-    - КОНТРОЛЛЕР ТИПА РЕСУРС
-        php artisan make:controller Admin\CoreResourse --resource // вместе с методами которые автоматом будут работать the typical "CRUD" РOST GET PUT DELETE
-        Route::resource('/pages', 'Admin\CoreResource'); // для каждого метода сво маршрут
-        Route::resource('/pages', 'Admin\CoreResource', ['only' => ['index', 'show']]); // тольео для методов index и show
-        если:
-            ['except' => ['show']] // будут исключены
+    - РљРћРќРўР РћР›Р›Р•Р  РўРРџРђ Р Р•РЎРЈР РЎ
+        php artisan make:controller Admin\CoreResourse --resource // РІРјРµСЃС‚Рµ СЃ РјРµС‚РѕРґР°РјРё РєРѕС‚РѕСЂС‹Рµ Р°РІС‚РѕРјР°С‚РѕРј Р±СѓРґСѓС‚ СЂР°Р±РѕС‚Р°С‚СЊ the typical "CRUD" Р OST GET PUT DELETE
+        Route::resource('/pages', 'Admin\CoreResource'); // РґР»СЏ РєР°Р¶РґРѕРіРѕ РјРµС‚РѕРґР° СЃРІРѕ РјР°СЂС€СЂСѓС‚
+        Route::resource('/pages', 'Admin\CoreResource', ['only' => ['index', 'show']]); // С‚РѕР»СЊРµРѕ РґР»СЏ РјРµС‚РѕРґРѕРІ index Рё show
+        РµСЃР»Рё:
+            ['except' => ['show']] // Р±СѓРґСѓС‚ РёСЃРєР»СЋС‡РµРЅС‹
 
-        если нужно добавить свой метод в контроллер:
-            Route::get('/pages/add', 'Admin\CoreResource@add'); // свой метод в контроллере
+        РµСЃР»Рё РЅСѓР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ СЃРІРѕР№ РјРµС‚РѕРґ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂ:
+            Route::get('/pages/add', 'Admin\CoreResource@add'); // СЃРІРѕР№ РјРµС‚РѕРґ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ
             Route::resource('/pages', 'Admin\CoreResource', ['only' => ['index', 'show']]);
 
-    что б в контроллере добратся до url роута:
+    С‡С‚Рѕ Р± РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ РґРѕР±СЂР°С‚СЃСЏ РґРѕ url СЂРѕСѓС‚Р°:
         echo route('ages.create');
 
-=== КЛАСС ПОСРЕДНИК
-    проверка данных к примеру аутентификация или фильтр данных и т.д.
-    C:\OpenServer\OSPanel\domains\mylar\app\Http\Middleware\ - тут находятся
-    - содание
+=== РљР›РђРЎРЎ РџРћРЎР Р•Р”РќРРљ
+    РїСЂРѕРІРµСЂРєР° РґР°РЅРЅС‹С… Рє РїСЂРёРјРµСЂСѓ Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёСЏ РёР»Рё С„РёР»СЊС‚СЂ РґР°РЅРЅС‹С… Рё С‚.Рґ.
+    C:\OpenServer\OSPanel\domains\mylar\app\Http\Middleware\ - С‚СѓС‚ РЅР°С…РѕРґСЏС‚СЃСЏ
+    - СЃРѕРґР°РЅРёРµ
         php artisan make:middleware Mymiddleware
     
-    - его нужно привязать либо ко всем или к конкретному маршруту
+    - РµРіРѕ РЅСѓР¶РЅРѕ РїСЂРёРІСЏР·Р°С‚СЊ Р»РёР±Рѕ РєРѕ РІСЃРµРј РёР»Рё Рє РєРѕРЅРєСЂРµС‚РЅРѕРјСѓ РјР°СЂС€СЂСѓС‚Сѓ
         C:\OpenServer\OSPanel\domains\mylar\app\Http\Kernel.php
-            protected $middleware = []; // посредники для любых запросов
-            protected $routeMiddleware = []; // для конкретных маршрутов
+            protected $middleware = []; // РїРѕСЃСЂРµРґРЅРёРєРё РґР»СЏ Р»СЋР±С‹С… Р·Р°РїСЂРѕСЃРѕРІ
+            protected $routeMiddleware = []; // РґР»СЏ РєРѕРЅРєСЂРµС‚РЅС‹С… РјР°СЂС€СЂСѓС‚РѕРІ
             +'mymiddle' => \App\Http\Middleware\Mymiddleware::class,
-    - роутер 
-        Route::get('/article/{page}', 'Admin\MyCore@getArticle')->middleware('mymiddle'); // или в массиве []
+    - СЂРѕСѓС‚РµСЂ 
+        Route::get('/article/{page}', 'Admin\MyCore@getArticle')->middleware('mymiddle'); // РёР»Рё РІ РјР°СЃСЃРёРІРµ []
     
-    - для вызова в контроллерах в __construct:
+    - РґР»СЏ РІС‹Р·РѕРІР° РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂР°С… РІ __construct:
         $this->middleware('mymiddleware');
     
-    - передать параметр
+    - РїРµСЂРµРґР°С‚СЊ РїР°СЂР°РјРµС‚СЂ
         ->middleware('mymiddle:myParam');
-        в посреднике добавить:
+        РІ РїРѕСЃСЂРµРґРЅРёРєРµ РґРѕР±Р°РІРёС‚СЊ:
              public function handle($request, Closure $next, $MyParam)
 
-=== ВИДЫ
-    - Путь
+=== Р’РР”Р«
+    - РџСѓС‚СЊ
         C:\OpenServer\OSPanel\domains\mylar\resources\views\page.blade.php
-        page.blade.php - с использованием шаблонизатора
-        page.php - без использованием шаблонизатора
-    - В контроллере
+        page.blade.php - СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј С€Р°Р±Р»РѕРЅРёР·Р°С‚РѕСЂР°
+        page.php - Р±РµР· РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј С€Р°Р±Р»РѕРЅРёР·Р°С‚РѕСЂР°
+    - Р’ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ
         return view('page');
         
         C:\OpenServer\OSPanel\domains\mylar\resources\views\myfirst\page.blade.php
         return view('myfirst.page');
 
-    - Преременные добавить
+    - РџСЂРµСЂРµРјРµРЅРЅС‹Рµ РґРѕР±Р°РІРёС‚СЊ
         return view('page', ['key' => 'val']);
         return view('myfirst.page')->with($data[]);
-        return view('myfirst.page')->withMyvar('MY VAR'); // во view $myvar
+        return view('myfirst.page')->withMyvar('MY VAR'); // РІРѕ view $myvar
     
-    - Ссылки 
+    - РЎСЃС‹Р»РєРё 
         <a href="<?php echo route('home')?>">Link Home</a>
         <a href="<?php echo route('home', ['id'=>10])?>">Link Home</a>
     
-    - проверка есть ли шаблон
+    - РїСЂРѕРІРµСЂРєР° РµСЃС‚СЊ Р»Рё С€Р°Р±Р»РѕРЅ
         if(view()->exists('myfirst.page')){}
     
-    $path = config('view.paths'); // view - файл в папке config paths - переменная в нем
+    $path = config('view.paths'); // view - С„Р°Р№Р» РІ РїР°РїРєРµ config paths - РїРµСЂРµРјРµРЅРЅР°СЏ РІ РЅРµРј
     return view()->file($path[0].'/mydir/mydirfile.php');
 
-    - назначить имя шаблону 
+    - РЅР°Р·РЅР°С‡РёС‚СЊ РёРјСЏ С€Р°Р±Р»РѕРЅСѓ 
         view()->name('myfirst.page', 'myname');
-        view()->of('myname'); // переменные так само передаются
+        view()->of('myname'); // РїРµСЂРµРјРµРЅРЅС‹Рµ С‚Р°Рє СЃР°РјРѕ РїРµСЂРµРґР°СЋС‚СЃСЏ
 // HTML && FORMS
-    - сохранить вид в переменную:
+    - СЃРѕС…СЂР°РЅРёС‚СЊ РІРёРґ РІ РїРµСЂРµРјРµРЅРЅСѓСЋ:
         $view = view('page', ['key' => 'val'])->render();
         echo $view;
 
-    - путь к шаблону:
+    - РїСѓС‚СЊ Рє С€Р°Р±Р»РѕРЅСѓ:
         view('page', ['key' => 'val'])->getPath();
-    - шаблон
+    - С€Р°Р±Р»РѕРЅ
         {!! Form::open(['url' =>route('home'), 'class' => 'my', 'method' => 'post' ]) !!}
         {!! Form::hidden('action', 'delete') !!}
         {!! Form::text('alias', old(alias), ['class' => 'my']) !!}
         {!! Form::button('Delete', ['class' => 'del', 'type' => 'submit']) !!}
         {!! Form::close() !!}
-=== ШАБОНИЗАТОР BLADE
+=== РЁРђР‘РћРќРР—РђРўРћР  BLADE
 
         [
-            a) создаем  C:\OpenServer\OSPanel\domains\loc\resources\views\layouts\site.blade.php
-              куда кидаем весь диз шаблона
+            a) СЃРѕР·РґР°РµРј  C:\OpenServer\OSPanel\domains\loc\resources\views\layouts\site.blade.php
+              РєСѓРґР° РєРёРґР°РµРј РІРµСЃСЊ РґРёР· С€Р°Р±Р»РѕРЅР°
                 @yield('header')
                 @yield('content')
-            б) создаем  C:\OpenServer\OSPanel\domains\loc\resources\views\site\content.blade.php
-                            - ТУТ HTML
+            Р±) СЃРѕР·РґР°РµРј  C:\OpenServer\OSPanel\domains\loc\resources\views\site\content.blade.php
+                            - РўРЈРў HTML
                         C:\OpenServer\OSPanel\domains\loc\resources\views\site\header.blade.php
-                            - ТУТ HTML
+                            - РўРЈРў HTML
                         C:\OpenServer\OSPanel\domains\loc\resources\views\site\index.blade.php
                             @extends('layouts.site')
 
@@ -206,16 +206,16 @@ public_path()
                                 @include('site.content')
                             @endsection;
 
-            в) в контроллере return view('site.index');
+            РІ) РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ return view('site.index');
         ]
     
-    - скомпилированные шаблоны в:
+    - СЃРєРѕРјРїРёР»РёСЂРѕРІР°РЅРЅС‹Рµ С€Р°Р±Р»РѕРЅС‹ РІ:
     C:\OpenServer\OSPanel\domains\mylar\storage\framework\views\
     
-    - должны называтся *.blade.php
-    - ссылки:
+    - РґРѕР»Р¶РЅС‹ РЅР°Р·С‹РІР°С‚СЃСЏ *.blade.php
+    - СЃСЃС‹Р»РєРё:
         {!! link_to (route('home', 'Back')) !!}
-    - выделить код в секцию:
+    - РІС‹РґРµР»РёС‚СЊ РєРѕРґ РІ СЃРµРєС†РёСЋ:
         @section('navbar')  
         <nav>
           <ul>
@@ -224,13 +224,13 @@ public_path()
         </nav>
         @endsection()
 
-    - вывести код в шаблоне:    
-        @yield('navbar') // он выводит не срау а оворит де что будет выводится :) а в контроллере макет которы насл
+    - РІС‹РІРµСЃС‚Рё РєРѕРґ РІ С€Р°Р±Р»РѕРЅРµ:    
+        @yield('navbar') // РѕРЅ РІС‹РІРѕРґРёС‚ РЅРµ СЃСЂР°Сѓ Р° РѕРІРѕСЂРёС‚ РґРµ С‡С‚Рѕ Р±СѓРґРµС‚ РІС‹РІРѕРґРёС‚СЃСЏ :) Р° РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ РјР°РєРµС‚ РєРѕС‚РѕСЂС‹ РЅР°СЃР»
     
-    - в форму добавить:
+    - РІ С„РѕСЂРјСѓ РґРѕР±Р°РІРёС‚СЊ:
         {{ csrf_field() }} 
     
-    - или :
+    - РёР»Рё :
         @section('navbar')  
             <nav>
               <ul>
@@ -239,60 +239,60 @@ public_path()
             </nav>
         @show 
 
-    - данный шаблон наследует функционал от родительского макета в начале файл index.blade.php - дочерний:
+    - РґР°РЅРЅС‹Р№ С€Р°Р±Р»РѕРЅ РЅР°СЃР»РµРґСѓРµС‚ С„СѓРЅРєС†РёРѕРЅР°Р» РѕС‚ СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РјР°РєРµС‚Р° РІ РЅР°С‡Р°Р»Рµ С„Р°Р№Р» index.blade.php - РґРѕС‡РµСЂРЅРёР№:
         @extends('mydir.layouts.layout')
         
-        - переопределили секцию в этом же фале:
+        - РїРµСЂРµРѕРїСЂРµРґРµР»РёР»Рё СЃРµРєС†РёСЋ РІ СЌС‚РѕРј Р¶Рµ С„Р°Р»Рµ:
             @section('navbar')
             @endsection
         
-        - вывести родительски:
+        - РІС‹РІРµСЃС‚Рё СЂРѕРґРёС‚РµР»СЊСЃРєРё:
             @section('navbar')
                 @parent
             @endsection
         
-        - пример:
+        - РїСЂРёРјРµСЂ:
             @section('footer')
                 @parent
                 <p>Hi man!</p>
             @endsection
         
-        - секция в шаблоне где контент вместо него родительский:
+        - СЃРµРєС†РёСЏ РІ С€Р°Р±Р»РѕРЅРµ РіРґРµ РєРѕРЅС‚РµРЅС‚ РІРјРµСЃС‚Рѕ РЅРµРіРѕ СЂРѕРґРёС‚РµР»СЊСЃРєРёР№:
             @yield('content')
 
-            файле index в дочернем:
+            С„Р°Р№Р»Рµ index РІ РґРѕС‡РµСЂРЅРµРј:
             @section('content')
                 <h1>Hello World</h1>
             @endsection
             
-            или отдельно содадим файл content
+            РёР»Рё РѕС‚РґРµР»СЊРЅРѕ СЃРѕРґР°РґРёРј С„Р°Р№Р» content
             @section('content')
                 @include('mydir.content')
             @endsection
         
-        - в контроллере обращ только к дочерним
+        - РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ РѕР±СЂР°С‰ С‚РѕР»СЊРєРѕ Рє РґРѕС‡РµСЂРЅРёРј
 
-        - передача данных в шаблон hjlbntkmcrb:
+        - РїРµСЂРµРґР°С‡Р° РґР°РЅРЅС‹С… РІ С€Р°Р±Р»РѕРЅ hjlbntkmcrb:
             {{ $title }}
             
-            {{ тут можем испольовать стандартн функции php или Laravel  }}
-            {{ route('home') }}, {{ date() }} - без ;
+            {{ С‚СѓС‚ РјРѕР¶РµРј РёСЃРїРѕР»СЊРѕРІР°С‚СЊ СЃС‚Р°РЅРґР°СЂС‚РЅ С„СѓРЅРєС†РёРё php РёР»Рё Laravel  }}
+            {{ route('home') }}, {{ date() }} - Р±РµР· ;
 
-        - во всех фалах blade что подкл есть доступ к переменным
+        - РІРѕ РІСЃРµС… С„Р°Р»Р°С… blade С‡С‚Рѕ РїРѕРґРєР» РµСЃС‚СЊ РґРѕСЃС‚СѓРї Рє РїРµСЂРµРјРµРЅРЅС‹Рј
         
-        {{ $script }}  - в HTML сущность 
-        {!! $script !!} - будет скрипт работать (<script>alert()</script>)
-        @{{ $script }} -  выведит {{ $script }}
+        {{ $script }}  - РІ HTML СЃСѓС‰РЅРѕСЃС‚СЊ 
+        {!! $script !!} - Р±СѓРґРµС‚ СЃРєСЂРёРїС‚ СЂР°Р±РѕС‚Р°С‚СЊ (<script>alert()</script>)
+        @{{ $script }} -  РІС‹РІРµРґРёС‚ {{ $script }}
         {{ isset($script) ? $script : $title }}   = {{ $script or $title }}
 
-    - Условия 
+    - РЈСЃР»РѕРІРёСЏ 
         @if(count($list) < 3)
-            в массиые < 3 елементов
+            РІ РјР°СЃСЃРёС‹Рµ < 3 РµР»РµРјРµРЅС‚РѕРІ
         @elseif()
         @else    
         @endif
 
-    - Циклы
+    - Р¦РёРєР»С‹
         @for($i = 0; $i < count($list2); $i++) 
             {{ $list2[$i] }}
         @endfor
@@ -308,10 +308,10 @@ public_path()
         @endforelse
 
         @each('mydir.mylist', $list, 'value') 
-            1 - шаблон 2 - массив  3  название переменнной
-            - в шаблоне <h3>{{ $value }}</h3>
+            1 - С€Р°Р±Р»РѕРЅ 2 - РјР°СЃСЃРёРІ  3  РЅР°Р·РІР°РЅРёРµ РїРµСЂРµРјРµРЅРЅРЅРѕР№
+            - РІ С€Р°Р±Р»РѕРЅРµ <h3>{{ $value }}</h3>
 
-=== ДОБАВИТЬ СВОЮ ДИРЕКТИВУ (свою функцию блед)
+=== Р”РћР‘РђР’РРўР¬ РЎР’РћР® Р”РР Р•РљРўРР’РЈ (СЃРІРѕСЋ С„СѓРЅРєС†РёСЋ Р±Р»РµРґ)
     C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php
         + use Blade; 
         + public function boot()
@@ -320,11 +320,11 @@ public_path()
                 return 'My New Blades fnction -> '.$var; 
             });
         }
-        - в шаблоне:
+        - РІ С€Р°Р±Р»РѕРЅРµ:
             @myDir('hello')
 
 
-=== Класс Request в контроллере
+=== РљР»Р°СЃСЃ Request РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ
     
     protected $request; 
     
@@ -332,66 +332,66 @@ public_path()
        $this->request = $request; 
     }
 
-    - все: 
-        $this->request->all(); - весб массив
-        $request->input('name', 'по умолчанию'); - начение name
-        $request->has('name') - есть ли
-        $request->only('name', 'site') - только эти
-        $request->except('name', 'site') - убрать из массива  
-        $request->myvar - выведит myvar - сначала post потом get
-        $request->path - путь uri 
-        $request->is('contact/*') - вернет true если uri совпадает с укаанным значением
+    - РІСЃРµ: 
+        $this->request->all(); - РІРµСЃР± РјР°СЃСЃРёРІ
+        $request->input('name', 'РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ'); - РЅР°С‡РµРЅРёРµ name
+        $request->has('name') - РµСЃС‚СЊ Р»Рё
+        $request->only('name', 'site') - С‚РѕР»СЊРєРѕ СЌС‚Рё
+        $request->except('name', 'site') - СѓР±СЂР°С‚СЊ РёР· РјР°СЃСЃРёРІР°  
+        $request->myvar - РІС‹РІРµРґРёС‚ myvar - СЃРЅР°С‡Р°Р»Р° post РїРѕС‚РѕРј get
+        $request->path - РїСѓС‚СЊ uri 
+        $request->is('contact/*') - РІРµСЂРЅРµС‚ true РµСЃР»Рё uri СЃРѕРІРїР°РґР°РµС‚ СЃ СѓРєР°Р°РЅРЅС‹Рј Р·РЅР°С‡РµРЅРёРµРј
         $request->url()
         $request->fullUrl()
-        $request->method() // post get put delete строка 
-        $request->isMethod('post')  // true если метод post
-        $request->root() // домен 
-        $request->query() // из get
-        $request->header() // массив header 
-        $request->server() // супер глоб массив
-        $request->segments() // массив запроса польователя
-        $request->file('images') // файл формы с именем images
-         пример:
+        $request->method() // post get put delete СЃС‚СЂРѕРєР° 
+        $request->isMethod('post')  // true РµСЃР»Рё РјРµС‚РѕРґ post
+        $request->root() // РґРѕРјРµРЅ 
+        $request->query() // РёР· get
+        $request->header() // РјР°СЃСЃРёРІ header 
+        $request->server() // СЃСѓРїРµСЂ РіР»РѕР± РјР°СЃСЃРёРІ
+        $request->segments() // РјР°СЃСЃРёРІ Р·Р°РїСЂРѕСЃР° РїРѕР»СЊРѕРІР°С‚РµР»СЏ
+        $request->file('images') // С„Р°Р№Р» С„РѕСЂРјС‹ СЃ РёРјРµРЅРµРј images
+         РїСЂРёРјРµСЂ:
             if($request->isMethod('post')){
                 // validation
-                $request->flash(); // сохраняет в сессию все данные запроса
-                $request->flush(); // отчистить сессию от данных flash
-                $request->flashOnly('user_name'); // какие записать в сессию
-                $request->flashExcept('user_name'); // какие НЕ записать в сессию
+                $request->flash(); // СЃРѕС…СЂР°РЅСЏРµС‚ РІ СЃРµСЃСЃРёСЋ РІСЃРµ РґР°РЅРЅС‹Рµ Р·Р°РїСЂРѕСЃР°
+                $request->flush(); // РѕС‚С‡РёСЃС‚РёС‚СЊ СЃРµСЃСЃРёСЋ РѕС‚ РґР°РЅРЅС‹С… flash
+                $request->flashOnly('user_name'); // РєР°РєРёРµ Р·Р°РїРёСЃР°С‚СЊ РІ СЃРµСЃСЃРёСЋ
+                $request->flashExcept('user_name'); // РєР°РєРёРµ РќР• Р·Р°РїРёСЃР°С‚СЊ РІ СЃРµСЃСЃРёСЋ
                 /*
                 C:\OpenServer\OSPanel\domains\mylar\app\Http\Kernel.php
-                - подключить посредник для открытия сессии 
-                    в $middleware добавить 
-                    \Illuminate\Session\Middleware\StartSession::class, но и так работает
+                - РїРѕРґРєР»СЋС‡РёС‚СЊ РїРѕСЃСЂРµРґРЅРёРє РґР»СЏ РѕС‚РєСЂС‹С‚РёСЏ СЃРµСЃСЃРёРё 
+                    РІ $middleware РґРѕР±Р°РІРёС‚СЊ 
+                    \Illuminate\Session\Middleware\StartSession::class, РЅРѕ Рё С‚Р°Рє СЂР°Р±РѕС‚Р°РµС‚
                 */
             }
 
-        return redirect()->route('contact')->withInput(); // сохр все содерж поле в сессию    
+        return redirect()->route('contact')->withInput(); // СЃРѕС…СЂ РІСЃРµ СЃРѕРґРµСЂР¶ РїРѕР»Рµ РІ СЃРµСЃСЃРёСЋ    
 
 
-===СЕССИИ + BLADE
+===РЎР•РЎРЎРР + BLADE
     {{ print_r(Session::all()) }}
     <input type="text" id="name" value='{{ old('user_name') }}' name="user_name">
     <?php echo old('user_name'); ?>
 
-=== Класс Response в контроллере
+=== РљР»Р°СЃСЃ Response РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ
     use Illuminate\Http\Resonse;
 
     $view = view('mydir.contact')->with(['title' => 'contacts'])->render();
     return (new Response($view))->header('Content-Type', 'newTipe')->header('Content-Type2', 'newTipe2');
-    или 
+    РёР»Рё 
     return resonse();
 
     - json
         return resonse()->json();
     
-    - файл на скачивание
+    - С„Р°Р№Р» РЅР° СЃРєР°С‡РёРІР°РЅРёРµ
         return response()->download('robots.txt', 'my.txt', ['hederOne' => '', 'headerTwo' => '']);
     
-    - примеры:
+    - РїСЂРёРјРµСЂС‹:
         return response($view)->withHeaders([]);
 
-=== ДОБАВИТЬ СВОЮ ДИРЕКТИВУ (свою функцию Response)
+=== Р”РћР‘РђР’РРўР¬ РЎР’РћР® Р”РР Р•РљРўРР’РЈ (СЃРІРѕСЋ С„СѓРЅРєС†РёСЋ Response)
     C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php
         + use Response;  // config app.php
         + public function boot()
@@ -400,45 +400,45 @@ public_path()
                 return Resonse::make($var); 
             });
         }
-        - в контроллере:
+        - РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
             return response()->myResonse('Hello World');
 
-=== МИГРАЦИЯ БД 
-    Миграция - система контроля версий для бд
+=== РњРР“Р РђР¦РРЇ Р‘Р” 
+    РњРёРіСЂР°С†РёСЏ - СЃРёСЃС‚РµРјР° РєРѕРЅС‚СЂРѕР»СЏ РІРµСЂСЃРёР№ РґР»СЏ Р±Рґ
 
-    - конфигурация
+    - РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ
         C:\OpenServer\OSPanel\domains\mylar\config\database.php
     
-    - таблица где хранится инфа
+    - С‚Р°Р±Р»РёС†Р° РіРґРµ С…СЂР°РЅРёС‚СЃСЏ РёРЅС„Р°
         'migrations' => 'my_migrations',
 
-    - содание:
-        php artisan make:migration create_articles_table - миграция содает таблицу articles 
-        php artisan make:migration create_articles_table --create=articles - созд миграции под articles
-        в C:\OpenServer\OSPanel\domains\mylar\database\migrations\2018_02_10_123120_create_articles_table.php
+    - СЃРѕРґР°РЅРёРµ:
+        php artisan make:migration create_articles_table - РјРёРіСЂР°С†РёСЏ СЃРѕРґР°РµС‚ С‚Р°Р±Р»РёС†Сѓ articles 
+        php artisan make:migration create_articles_table --create=articles - СЃРѕР·Рґ РјРёРіСЂР°С†РёРё РїРѕРґ articles
+        РІ C:\OpenServer\OSPanel\domains\mylar\database\migrations\2018_02_10_123120_create_articles_table.php
         
-        - класс Schema:: - конструктор таблиц (созд, изм, атрибуты табл
+        - РєР»Р°СЃСЃ Schema:: - РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С‚Р°Р±Р»РёС† (СЃРѕР·Рґ, РёР·Рј, Р°С‚СЂРёР±СѓС‚С‹ С‚Р°Р±Р»
 
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id'); // id INT auto_increment PRIMARY_KEY
             $table->string('name', 100); // varchar 100 
             $table->text('text', 100); // text 100 
             $table->string('img', 255); // varchar 100 
-            $table->timestamps(); // поля время обновления аписи
+            $table->timestamps(); // РїРѕР»СЏ РІСЂРµРјСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ Р°РїРёСЃРё
         });
 
-        php artisan make:migration change_articles_table --table=articles - созд миграцию с доступом к таблице
-        public function up() // при созд
-        {   $table->string('name')->default('yeah')->change(); // изменит структуру поля
+        php artisan make:migration change_articles_table --table=articles - СЃРѕР·Рґ РјРёРіСЂР°С†РёСЋ СЃ РґРѕСЃС‚СѓРїРѕРј Рє С‚Р°Р±Р»РёС†Рµ
+        public function up() // РїСЂРё СЃРѕР·Рґ
+        {   $table->string('name')->default('yeah')->change(); // РёР·РјРµРЅРёС‚ СЃС‚СЂСѓРєС‚СѓСЂСѓ РїРѕР»СЏ
             if(Schema::hasTable('articles')){ // Schema::hasColumn('alias')
                 Schema::table('articles', function (Blueprint $table) {
-                $table->string('new_name', 100); // varchar 100 добавит в существ табл 
+                $table->string('new_name', 100); // varchar 100 РґРѕР±Р°РІРёС‚ РІ СЃСѓС‰РµСЃС‚РІ С‚Р°Р±Р» 
                 });
             } 
            
         }
 
-        public function down() // при отмене
+        public function down() // РїСЂРё РѕС‚РјРµРЅРµ
         {
             Schema::table('articles', function (Blueprint $table) {
                 $table->dropColumn('new_name');
@@ -446,12 +446,12 @@ public_path()
         }
 
 
-        php artisan migrate - содаст таблицы в бд
-        php artisan migrate:rollback  - отменит миграцию на прошлом шаге
-        php artisan migrate:reset  - отменит миграцию всю 
+        php artisan migrate - СЃРѕРґР°СЃС‚ С‚Р°Р±Р»РёС†С‹ РІ Р±Рґ
+        php artisan migrate:rollback  - РѕС‚РјРµРЅРёС‚ РјРёРіСЂР°С†РёСЋ РЅР° РїСЂРѕС€Р»РѕРј С€Р°РіРµ
+        php artisan migrate:reset  - РѕС‚РјРµРЅРёС‚ РјРёРіСЂР°С†РёСЋ РІСЃСЋ 
 
 
-        - лучше бать mySQL >5.7
+        - Р»СѓС‡С€Рµ Р±Р°С‚СЊ mySQL >5.7
 
 === DOCTRINE 
     comoser.json
@@ -460,10 +460,10 @@ public_path()
     comoser update
 
 
-=== МЕХАНИМ НАПОЛНЕНИЯ ПОСЕВ ДАННЫМИ для тестиования
+=== РњР•РҐРђРќРРњ РќРђРџРћР›РќР•РќРРЇ РџРћРЎР•Р’ Р”РђРќРќР«РњР РґР»СЏ С‚РµСЃС‚РёРѕРІР°РЅРёСЏ
     C:\OpenServer\OSPanel\domains\mylar\database\seeds\DatabaseSeeder.php
 
-    php artisan make:seeder UsersTableSeeder - создание
+    php artisan make:seeder UsersTableSeeder - СЃРѕР·РґР°РЅРёРµ
 
     public function run()
     {
@@ -484,13 +484,13 @@ public_path()
         
     }
 
-    php artisan db:seed - выполнит C:\OpenServer\OSPanel\domains\mylar\database\seeds\DatabaseSeeder.php
-        $this->call(UsersTableSeeder::class); // в run
+    php artisan db:seed - РІС‹РїРѕР»РЅРёС‚ C:\OpenServer\OSPanel\domains\mylar\database\seeds\DatabaseSeeder.php
+        $this->call(UsersTableSeeder::class); // РІ run
 
-    php artisan db:seed --class=UsersTableSeeder - выполнит C:\OpenServer\OSPanel\domains\mylar\database\seeds\UsersTableSeeder.php
+    php artisan db:seed --class=UsersTableSeeder - РІС‹РїРѕР»РЅРёС‚ C:\OpenServer\OSPanel\domains\mylar\database\seeds\UsersTableSeeder.php
 
 
-=== ПРОСТЫЙ SQL ЗАПРОСЫ
+=== РџР РћРЎРўР«Р™ SQL Р—РђРџР РћРЎР«
     $articles = DB::select(" SELECT * FROM `articles` WHERE id = ?", [2]);
     :id, ['id' => 2
 
@@ -499,24 +499,24 @@ public_path()
 
     $id = DB::connection()->getPdo()->lastInsertId();
     
-    DB::statement('DROP table articles'); // общие запросы
+    DB::statement('DROP table articles'); // РѕР±С‰РёРµ Р·Р°РїСЂРѕСЃС‹
         
-    dump($articles); // помошник вида
+    dump($articles); // РїРѕРјРѕС€РЅРёРє РІРёРґР°
 
     C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php boot
     
-    DB::listen(function($query){ // будет выыватся при любом апросе к бае данных 
+    DB::listen(function($query){ // Р±СѓРґРµС‚ РІС‹С‹РІР°С‚СЃСЏ РїСЂРё Р»СЋР±РѕРј Р°РїСЂРѕСЃРµ Рє Р±Р°Рµ РґР°РЅРЅС‹С… 
             dump($query->sql); // query
             dump($query->bindings); // params
         });
 
-    - конструкторы запроса:
+    - РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Р·Р°РїСЂРѕСЃР°:
         DB::table('articles')->get(); //"select * from `articles`"
         DB::table('articles')->first(); //"select * from `articles` limit 1"
 
-        //если очень много записей разбиваем на части 2 - кол зап в одной части
+        //РµСЃР»Рё РѕС‡РµРЅСЊ РјРЅРѕРіРѕ Р·Р°РїРёСЃРµР№ СЂР°Р·Р±РёРІР°РµРј РЅР° С‡Р°СЃС‚Рё 2 - РєРѕР» Р·Р°Рї РІ РѕРґРЅРѕР№ С‡Р°СЃС‚Рё
         DB::table('articles')->orderBy('id')->chunk(2, function($articles){
-        // функция будет выполнятся для каждой порции в отдельности
+        // С„СѓРЅРєС†РёСЏ Р±СѓРґРµС‚ РІС‹РїРѕР»РЅСЏС‚СЃСЏ РґР»СЏ РєР°Р¶РґРѕР№ РїРѕСЂС†РёРё РІ РѕС‚РґРµР»СЊРЅРѕСЃС‚Рё
             foreach( $articles as $article ){
                 FirstController::addArticles($article);
             }
@@ -534,24 +534,24 @@ public_path()
 
         $query = DB::table('articles')->select('id');
         $query->addSelect('name');
-        $query->where('name', '=', 'Вася');    // "select `id`, `name` from `articles` where `name` = ?"
-        $query->where('name', '=', 'Коля', 'or');    // "select `id`, `name` from `articles` where `name` = ? or `name` = ?"
-        $query->where('name', '=', 'Коля');    // "select `id`, `name` from `articles` where `name` = ? and `name` = ?"
+        $query->where('name', '=', 'Р’Р°СЃСЏ');    // "select `id`, `name` from `articles` where `name` = ?"
+        $query->where('name', '=', 'РљРѕР»СЏ', 'or');    // "select `id`, `name` from `articles` where `name` = ? or `name` = ?"
+        $query->where('name', '=', 'РљРѕР»СЏ');    // "select `id`, `name` from `articles` where `name` = ? and `name` = ?"
 
-        или 
+        РёР»Рё 
         $query->where(
-                    ['name', '=', 'Вася'],
-                    ['name', '=', 'Коля', 'or']
+                    ['name', '=', 'Р’Р°СЃСЏ'],
+                    ['name', '=', 'РљРѕР»СЏ', 'or']
         )->get();
 
         $query->insert(
-                    ['name' => 'Вася'],
-                    ['name' => 'Коля']
+                    ['name' => 'Р’Р°СЃСЏ'],
+                    ['name' => 'РљРѕР»СЏ']
         );
 
         DB::table('articles')->where('id', 32)->update(
-            ['name' => 'Вася'],
-            ['name' => 'Коля']
+            ['name' => 'Р’Р°СЃСЏ'],
+            ['name' => 'РљРѕР»СЏ']
         );
 
         DB::table('articles')->where('id', 32)->delete();
@@ -561,15 +561,15 @@ public_path()
         orWhere
         whereBetween('id', 1, 5) whereNotBetween('id', 1, 5) groupBy() take(4) skip(2)
 
-===МОДЕЛИ
-	php artisan make:model Page (можно создать сразу миграцию --migration или -m)
+===РњРћР”Р•Р›Р
+	php artisan make:model Page (РјРѕР¶РЅРѕ СЃРѕР·РґР°С‚СЊ СЃСЂР°Р·Сѓ РјРёРіСЂР°С†РёСЋ --migration РёР»Рё -m)
 	
-	- класс модели:
-		protected $table = 'pages'; // имя таблицы
+	- РєР»Р°СЃСЃ РјРѕРґРµР»Рё:
+		protected $table = 'pages'; // РёРјСЏ С‚Р°Р±Р»РёС†С‹
 		protected $primaryKey = 'id'; 
 		public $incrementing = true;
-		public $timestamps = false; // поля создания и обновления
-	- в контроллере:
+		public $timestamps = false; // РїРѕР»СЏ СЃРѕР·РґР°РЅРёСЏ Рё РѕР±РЅРѕРІР»РµРЅРёСЏ
+	- РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
 		use App\Page;
 
 		$pages = Page::all(); 
@@ -577,67 +577,67 @@ public_path()
 		foreach($pages as $page){
 			$page->name;
 		}
- 		// все можно как работать с бд
+ 		// РІСЃРµ РјРѕР¶РЅРѕ РєР°Рє СЂР°Р±РѕС‚Р°С‚СЊ СЃ Р±Рґ
 		$pages = Page::where('id', '>', 10)->orderBy('name')->take(2)->get();
 		$pages = Page::find(12);
-		$pages = Page::findOrFail(12); // если не надет вернет исключение  
+		$pages = Page::findOrFail(12); // РµСЃР»Рё РЅРµ РЅР°РґРµС‚ РІРµСЂРЅРµС‚ РёСЃРєР»СЋС‡РµРЅРёРµ  
 
 
 
-		- создать
+		- СЃРѕР·РґР°С‚СЊ
 			$page = new Pages();
 			$page->name = 'new text';
 			$page->save();
 
-                        Pages::create( // нет прав добавить в таблицу с которой работаем
+                        Pages::create( // РЅРµС‚ РїСЂР°РІ РґРѕР±Р°РІРёС‚СЊ РІ С‚Р°Р±Р»РёС†Сѓ СЃ РєРѕС‚РѕСЂРѕР№ СЂР°Р±РѕС‚Р°РµРј
                             [
                                 'field' => 'some text',
                             ]
                         );
-                        - в модели:
-                            protected $fillable = ['name', 'text']; //разрешает добавлять в поля или в контроллере $page->unguard(); - снимает все ораничения 
-                            protected $guarded = ['img']; // '*' не разрешает добавлять в поля
+                        - РІ РјРѕРґРµР»Рё:
+                            protected $fillable = ['name', 'text']; //СЂР°Р·СЂРµС€Р°РµС‚ РґРѕР±Р°РІР»СЏС‚СЊ РІ РїРѕР»СЏ РёР»Рё РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ $page->unguard(); - СЃРЅРёРјР°РµС‚ РІСЃРµ РѕСЂР°РЅРёС‡РµРЅРёСЏ 
+                            protected $guarded = ['img']; // '*' РЅРµ СЂР°Р·СЂРµС€Р°РµС‚ РґРѕР±Р°РІР»СЏС‚СЊ РІ РїРѕР»СЏ
 
-                        Pages::firstOrCreate([ // ищит Вася если нет то содает
-                            'name' => 'Вася',
-                            'text' => 'где бабло?',   
+                        Pages::firstOrCreate([ // РёС‰РёС‚ Р’Р°СЃСЏ РµСЃР»Рё РЅРµС‚ С‚Рѕ СЃРѕРґР°РµС‚
+                            'name' => 'Р’Р°СЃСЏ',
+                            'text' => 'РіРґРµ Р±Р°Р±Р»Рѕ?',   
 
                         ])
 
-		- редактировать
+		- СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ
 			$page = Pages::find(12);
 			$page->name = 'new text';
 			$page->save();
 
-                - удалить 
+                - СѓРґР°Р»РёС‚СЊ 
                     $page = Page::find(12);
                     $page->delete();
                     
-                    или
+                    РёР»Рё
                         
                     Page::destroy([21,12]);
                     
-                    - мягкое удаление  (фремворк делает только пометку что апись удалена)
-                        модель:
+                    - РјСЏРіРєРѕРµ СѓРґР°Р»РµРЅРёРµ  (С„СЂРµРјРІРѕСЂРє РґРµР»Р°РµС‚ С‚РѕР»СЊРєРѕ РїРѕРјРµС‚РєСѓ С‡С‚Рѕ Р°РїРёСЃСЊ СѓРґР°Р»РµРЅР°)
+                        РјРѕРґРµР»СЊ:
                             Illuminate\Database\Eloquent\SoftDeletes;
                             class Article extends Model
                             {
                                 use SoftDeletes;
                             + protected $dates = ['deleted_at'];
 
-                            Article::withTrashed()->where()...; // вместе с удаленными
-                            Article::withTrashed()->restore()...; // вместе с удаленными + востанавливает
-                            Article::onlyTrashed()->restore()...; // вместе с удаленными + востанавливает
+                            Article::withTrashed()->where()...; // РІРјРµСЃС‚Рµ СЃ СѓРґР°Р»РµРЅРЅС‹РјРё
+                            Article::withTrashed()->restore()...; // РІРјРµСЃС‚Рµ СЃ СѓРґР°Р»РµРЅРЅС‹РјРё + РІРѕСЃС‚Р°РЅР°РІР»РёРІР°РµС‚
+                            Article::onlyTrashed()->restore()...; // РІРјРµСЃС‚Рµ СЃ СѓРґР°Р»РµРЅРЅС‹РјРё + РІРѕСЃС‚Р°РЅР°РІР»РёРІР°РµС‚
                             
                             $article = Article::find(1)    
-                            $article->forceDelete(); // полность удалить без мягкого
+                            $article->forceDelete(); // РїРѕР»РЅРѕСЃС‚СЊ СѓРґР°Р»РёС‚СЊ Р±РµР· РјСЏРіРєРѕРіРѕ
 
 
-                            - проверить:
+                            - РїСЂРѕРІРµСЂРёС‚СЊ:
                             foreach($articles as $article){
                                 if($article->trashed())
 
-                                $article->restore(); // востановить от удаления
+                                $article->restore(); // РІРѕСЃС‚Р°РЅРѕРІРёС‚СЊ РѕС‚ СѓРґР°Р»РµРЅРёСЏ
                             }
                         
                         migration
@@ -656,9 +656,9 @@ public_path()
 
                         php artisan migrate
 
-===СВЯЗИ МЕЖДУ ТАБЛИЦАМИ
+===РЎР’РЇР—Р РњР•Р–Р”РЈ РўРђР‘Р›РР¦РђРњР
     -OneToOne
-            -содаем миграцию:
+            -СЃРѕРґР°РµРј РјРёРіСЂР°С†РёСЋ:
              Schema::create('countries', function (Blueprint $table) {
                  $table->increments('id');
                  $table->string('name');
@@ -667,22 +667,22 @@ public_path()
                  $table->timestamps();
              });
 
-        + модель
-        в моделе Users добавим:
+        + РјРѕРґРµР»СЊ
+        РІ РјРѕРґРµР»Рµ Users РґРѕР±Р°РІРёРј:
             public function country(){
-                return $this->hasOne('App\Country'); //связывается с одной записью
-                еще есть
-                return $this->hasOne('App\Country', 'поле в таблице countries user_id', 'поле в таблице users id'); //user_id user - название модели id - поле
+                return $this->hasOne('App\Country'); //СЃРІСЏР·С‹РІР°РµС‚СЃСЏ СЃ РѕРґРЅРѕР№ Р·Р°РїРёСЃСЊСЋ
+                РµС‰Рµ РµСЃС‚СЊ
+                return $this->hasOne('App\Country', 'РїРѕР»Рµ РІ С‚Р°Р±Р»РёС†Рµ countries user_id', 'РїРѕР»Рµ РІ С‚Р°Р±Р»РёС†Рµ users id'); //user_id user - РЅР°Р·РІР°РЅРёРµ РјРѕРґРµР»Рё id - РїРѕР»Рµ
             }
             
-        в модели Country добавим:
+        РІ РјРѕРґРµР»Рё Country РґРѕР±Р°РІРёРј:
            public function user(){
                return $this->belongsTo('App\User');
            }
-        в контроллере
+        РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ
             use App\Users
             $user = User::find(1);
-            dump($user->country); // вернет модель Country
+            dump($user->country); // РІРµСЂРЅРµС‚ РјРѕРґРµР»СЊ Country
 
   
             $country = Country::find(1);
@@ -694,16 +694,16 @@ public_path()
                 $table->integer('user_id')->unsigned()->default(1);
                 $table->foreign('user_id')->references('id')->on('users');
 
-                модель User:
+                РјРѕРґРµР»СЊ User:
                     public function articles(){
-                        return $this->hasMany('App\Article'); //связывается с одной записью
+                        return $this->hasMany('App\Article'); //СЃРІСЏР·С‹РІР°РµС‚СЃСЏ СЃ РѕРґРЅРѕР№ Р·Р°РїРёСЃСЊСЋ
                     }
-                модель Article:
+                РјРѕРґРµР»СЊ Article:
                     public function user(){
                         return $this->belongsTo('App\User');
                     }
                     
-                контроллер:
+                РєРѕРЅС‚СЂРѕР»Р»РµСЂ:
                     $user = User::find(1);
                     dump($user->articles);
 
@@ -711,94 +711,94 @@ public_path()
                     dump($data->user);
       
 
-                    или 
+                    РёР»Рё 
                     
                     $user->articles()->where('id', 12)->first();
 
     -ManyToMany 
-        к примеру users - roles
+        Рє РїСЂРёРјРµСЂСѓ users - roles
 
-            модель User:
+            РјРѕРґРµР»СЊ User:
                     public function roles(){
                         return $this->belongsToMany('App\Role'); 
                     }
-            модель User:
+            РјРѕРґРµР»СЊ User:
                     public function users(){
                         return $this->belongsToMany('App\User', 'role_user', 'role_id', 'user_id'); 
                     }
-            контроллер:
+            РєРѕРЅС‚СЂРѕР»Р»РµСЂ:
                     $role = Role::find(1);
                     dump($role->users);
 
                     $user = User::find(1);
                     dump($user->roles);
 
-                    или 
+                    РёР»Рё 
                     
                     $user->roles()->where('roles.id', 12)->first();
 
-===Манипуляции со связанными записями
-    - линивая загрузка
-    свяанная информация из таблицы не подгружается пока не обратится к свойству тода будет запрос
+===РњР°РЅРёРїСѓР»СЏС†РёРё СЃРѕ СЃРІСЏР·Р°РЅРЅС‹РјРё Р·Р°РїРёСЃСЏРјРё
+    - Р»РёРЅРёРІР°СЏ Р·Р°РіСЂСѓР·РєР°
+    СЃРІСЏР°РЅРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РёР· С‚Р°Р±Р»РёС†С‹ РЅРµ РїРѕРґРіСЂСѓР¶Р°РµС‚СЃСЏ РїРѕРєР° РЅРµ РѕР±СЂР°С‚РёС‚СЃСЏ Рє СЃРІРѕР№СЃС‚РІСѓ С‚РѕРґР° Р±СѓРґРµС‚ Р·Р°РїСЂРѕСЃ
 
     $articles = Article::all();
     foreach($articles as $article){
-        echo $article->user->name; // + запрос
+        echo $article->user->name; // + Р·Р°РїСЂРѕСЃ
     }
     
-    -жадная загрузка
-    загрузка данных связаных таблиц сразу 2 запроса
+    -Р¶Р°РґРЅР°СЏ Р·Р°РіСЂСѓР·РєР°
+    Р·Р°РіСЂСѓР·РєР° РґР°РЅРЅС‹С… СЃРІСЏР·Р°РЅС‹С… С‚Р°Р±Р»РёС† СЃСЂР°Р·Сѓ 2 Р·Р°РїСЂРѕСЃР°
 
-    $articles = Article::with('user')->get() ; // with указывает какое модель\своство связанную подгрузить user - метод User - модель 
+    $articles = Article::with('user')->get() ; // with СѓРєР°Р·С‹РІР°РµС‚ РєР°РєРѕРµ РјРѕРґРµР»СЊ\СЃРІРѕСЃС‚РІРѕ СЃРІСЏР·Р°РЅРЅСѓСЋ РїРѕРґРіСЂСѓР·РёС‚СЊ user - РјРµС‚РѕРґ User - РјРѕРґРµР»СЊ 
     
     $users = User::with('articles', 'role')->get() ; 
 
     foreach($articles as $article){
-        echo $article->user->name; // нет запроса
+        echo $article->user->name; // РЅРµС‚ Р·Р°РїСЂРѕСЃР°
     }
 
-    или 
+    РёР»Рё 
 
     $articles = Article::all();
-    $articles->load('user', 'comment', 'aricles'); // если таблицы связаны то их нужно подгрузить что б на каждого пользователя не bikb новые запросы при выводе
+    $articles->load('user', 'comment', 'aricles'); // РµСЃР»Рё С‚Р°Р±Р»РёС†С‹ СЃРІСЏР·Р°РЅС‹ С‚Рѕ РёС… РЅСѓР¶РЅРѕ РїРѕРґРіСЂСѓР·РёС‚СЊ С‡С‚Рѕ Р± РЅР° РєР°Р¶РґРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµ bikb РЅРѕРІС‹Рµ Р·Р°РїСЂРѕСЃС‹ РїСЂРё РІС‹РІРѕРґРµ
     foreach($articles as $article){
-        echo $article->user->name; // нет запроса
+        echo $article->user->name; // РЅРµС‚ Р·Р°РїСЂРѕСЃР°
     }
 
-    - провертить есть ли связь:
-    $users = User::has('articles', '>=', 3)->get(); // выбрать те что имеют свзанные запиаи >= 3
-    $users = User::has('articles')->get(); // выбрать те что имеют свзанные запиаи 
+    - РїСЂРѕРІРµСЂС‚РёС‚СЊ РµСЃС‚СЊ Р»Рё СЃРІСЏР·СЊ:
+    $users = User::has('articles', '>=', 3)->get(); // РІС‹Р±СЂР°С‚СЊ С‚Рµ С‡С‚Рѕ РёРјРµСЋС‚ СЃРІР·Р°РЅРЅС‹Рµ Р·Р°РїРёР°Рё >= 3
+    $users = User::has('articles')->get(); // РІС‹Р±СЂР°С‚СЊ С‚Рµ С‡С‚Рѕ РёРјРµСЋС‚ СЃРІР·Р°РЅРЅС‹Рµ Р·Р°РїРёР°Рё 
 
-    -добавления:
+    -РґРѕР±Р°РІР»РµРЅРёСЏ:
         $users = User::find(1);
         
         $article = new Article([
             'nameField' => 'new record',
         ]);
 
-        $user->articles()->save($article); // принимает модель
+        $user->articles()->save($article); // РїСЂРёРЅРёРјР°РµС‚ РјРѕРґРµР»СЊ
     
-        или
+        РёР»Рё
 
-        $user->articles()->create([ // принимает простой массив
+        $user->articles()->create([ // РїСЂРёРЅРёРјР°РµС‚ РїСЂРѕСЃС‚РѕР№ РјР°СЃСЃРёРІ
             'nameField' => 'new record',
         ]);
         
-        добавить много
+        РґРѕР±Р°РІРёС‚СЊ РјРЅРѕРіРѕ
             $user->articles()->saveMany([
                 new Article(['nameField' => 'new record']),
                 new Article(['nameField' => 'new record2']),
                 new Article(['nameField' => 'new record3']),
             ]);
 
-    -редактирование связаных записей
+    -СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЃРІСЏР·Р°РЅС‹С… Р·Р°РїРёСЃРµР№
         $users = User::find(1);
         $user->articles()->where('id', 24)->update(['nameField' => 'new record']);
 
         OneToOne:
             $country = Country::find(1);
             $user = User::find(2);
-            $country->user()->associate($user); // перезаписуем связаные записи
+            $country->user()->associate($user); // РїРµСЂРµР·Р°РїРёСЃСѓРµРј СЃРІСЏР·Р°РЅС‹Рµ Р·Р°РїРёСЃРё
             $country->save();
 
         OneToMany:
@@ -806,64 +806,64 @@ public_path()
             $user = User::find(2);
 
             foreach($articles as $article){
-                echo $article->user()->associate($user); // изменяет значение внешнего ключа 
+                echo $article->user()->associate($user); // РёР·РјРµРЅСЏРµС‚ Р·РЅР°С‡РµРЅРёРµ РІРЅРµС€РЅРµРіРѕ РєР»СЋС‡Р° 
                 $article->save();
             }
 
         ManyToMany:
             $user = User::find(2);
             $role_id = Role::find(2)->id;
-            $user->roles()->attach($role_id); // промежуточная таблица новая запись
-             $user->roles()->detach($role_id); // промежуточная таблица удаляем запись
+            $user->roles()->attach($role_id); // РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅР°СЏ С‚Р°Р±Р»РёС†Р° РЅРѕРІР°СЏ Р·Р°РїРёСЃСЊ
+             $user->roles()->detach($role_id); // РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅР°СЏ С‚Р°Р±Р»РёС†Р° СѓРґР°Р»СЏРµРј Р·Р°РїРёСЃСЊ
 
 
-        -изминение свойств моделий
+        -РёР·РјРёРЅРµРЅРёРµ СЃРІРѕР№СЃС‚РІ РјРѕРґРµР»РёР№
             
-            читатили: метод выполн опред код когда обращение к своствам модели
-                - в модели:
-                    public function getNameAttribute($value){ // где Name - название своства
-                       return 'Hello' . $value; // $value - начение свойства
+            С‡РёС‚Р°С‚РёР»Рё: РјРµС‚РѕРґ РІС‹РїРѕР»РЅ РѕРїСЂРµРґ РєРѕРґ РєРѕРіРґР° РѕР±СЂР°С‰РµРЅРёРµ Рє СЃРІРѕСЃС‚РІР°Рј РјРѕРґРµР»Рё
+                - РІ РјРѕРґРµР»Рё:
+                    public function getNameAttribute($value){ // РіРґРµ Name - РЅР°Р·РІР°РЅРёРµ СЃРІРѕСЃС‚РІР°
+                       return 'Hello' . $value; // $value - РЅР°С‡РµРЅРёРµ СЃРІРѕР№СЃС‚РІР°
                     }
-            преобразователи: метод выполн опред код когда осущ изменение свойств модели
-                - в модели:
-                    public function setNameAttribute($value){ // где Name - название своства
-                       $this->attributes['name'] = $value; // $this->attributes[] - содержит свойства модели
+            РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚РµР»Рё: РјРµС‚РѕРґ РІС‹РїРѕР»РЅ РѕРїСЂРµРґ РєРѕРґ РєРѕРіРґР° РѕСЃСѓС‰ РёР·РјРµРЅРµРЅРёРµ СЃРІРѕР№СЃС‚РІ РјРѕРґРµР»Рё
+                - РІ РјРѕРґРµР»Рё:
+                    public function setNameAttribute($value){ // РіРґРµ Name - РЅР°Р·РІР°РЅРёРµ СЃРІРѕСЃС‚РІР°
+                       $this->attributes['name'] = $value; // $this->attributes[] - СЃРѕРґРµСЂР¶РёС‚ СЃРІРѕР№СЃС‚РІР° РјРѕРґРµР»Рё
                     }
 
-            - массив типов данных модели:
+            - РјР°СЃСЃРёРІ С‚РёРїРѕРІ РґР°РЅРЅС‹С… РјРѕРґРµР»Рё:
                 protected $casts = [
-                    'name' => 'boolean', // но на самом деле string, модель сама преобразует к типу указаному
-                    'text' => 'array', // если в контроллере присвоят массив то модель => в json и потом обратно в array 
+                    'name' => 'boolean', // РЅРѕ РЅР° СЃР°РјРѕРј РґРµР»Рµ string, РјРѕРґРµР»СЊ СЃР°РјР° РїСЂРµРѕР±СЂР°Р·СѓРµС‚ Рє С‚РёРїСѓ СѓРєР°Р·Р°РЅРѕРјСѓ
+                    'text' => 'array', // РµСЃР»Рё РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ РїСЂРёСЃРІРѕСЏС‚ РјР°СЃСЃРёРІ С‚Рѕ РјРѕРґРµР»СЊ => РІ json Рё РїРѕС‚РѕРј РѕР±СЂР°С‚РЅРѕ РІ array 
                 ];
-            - в контроллере
-            $article->toArray();// выведет всю модель в аррай    
-            $article->toJson();// выведет всю модель
+            - РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ
+            $article->toArray();// РІС‹РІРµРґРµС‚ РІСЃСЋ РјРѕРґРµР»СЊ РІ Р°СЂСЂР°Р№    
+            $article->toJson();// РІС‹РІРµРґРµС‚ РІСЃСЋ РјРѕРґРµР»СЊ
 
 
-=== ВАЛИДАЦИЯ ДАННЫХ
+=== Р’РђР›РР”РђР¦РРЇ Р”РђРќРќР«РҐ
 
-    - в контроллере 
+    - РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ 
 
         public function show(Request $request, $id = false) {
         
         if($request->isMethod('post')){
             
             $rules = [
-                'name' => 'required|max:10|unique:users,name', // | - правила отделяются  : - параметр см документ очень много :)
+                'name' => 'required|max:10|unique:users,name', // | - РїСЂР°РІРёР»Р° РѕС‚РґРµР»СЏСЋС‚СЃСЏ  : - РїР°СЂР°РјРµС‚СЂ СЃРј РґРѕРєСѓРјРµРЅС‚ РѕС‡РµРЅСЊ РјРЅРѕРіРѕ :)
                 'email' => 'required|email',
             ];
             
-            $this->validate($request, $rules); // если не прошла то будет редирект + все данные сохранятся в сессию
+            $this->validate($request, $rules); // РµСЃР»Рё РЅРµ РїСЂРѕС€Р»Р° С‚Рѕ Р±СѓРґРµС‚ СЂРµРґРёСЂРµРєС‚ + РІСЃРµ РґР°РЅРЅС‹Рµ СЃРѕС…СЂР°РЅСЏС‚СЃСЏ РІ СЃРµСЃСЃРёСЋ
             
             dump($request->all());
             
         }
     
-    - для вывода ошибок:
+    - РґР»СЏ РІС‹РІРѕРґР° РѕС€РёР±РѕРє:
     C:\OpenServer\OSPanel\domains\mylar\app\Http\Kernel.php 
         \Illuminate\View\Middleware\ShareErrorsFromSession::class, =>  protected $middleware = [];
 
-    - в шаблоне:
+    - РІ С€Р°Р±Р»РѕРЅРµ:
 
     @if(count($errors) > 0 )
         <div class='alert alert-danger'>
@@ -874,7 +874,7 @@ public_path()
     @endif
 
     
-    - контроллер ВРУЧНУЮ построение валидатора
+    - РєРѕРЅС‚СЂРѕР»Р»РµСЂ Р’Р РЈР§РќРЈР® РїРѕСЃС‚СЂРѕРµРЅРёРµ РІР°Р»РёРґР°С‚РѕСЂР°
     use Validator;
     class... 
     if($request->isMethod('post')){
@@ -885,12 +885,12 @@ public_path()
                 'name' => 'required',
             ], $messages);
 
-            if($validator->fails){ //true если были ошибки
+            if($validator->fails){ //true РµСЃР»Рё Р±С‹Р»Рё РѕС€РёР±РєРё
                 return redirect()->route('home')->withErrors($validator)->withInput();
             }
     }
 
-    - новый клас для валидации данных разок прописать что и как проверять
+    - РЅРѕРІС‹Р№ РєР»Р°СЃ РґР»СЏ РІР°Р»РёРґР°С†РёРё РґР°РЅРЅС‹С… СЂР°Р·РѕРє РїСЂРѕРїРёСЃР°С‚СЊ С‡С‚Рѕ Рё РєР°Рє РїСЂРѕРІРµСЂСЏС‚СЊ
         php artisan make:request ContactRequest
 
         C:\OpenServer\OSPanel\domains\mylar\app\Http\Requests\ContactRequest.php
@@ -898,17 +898,17 @@ public_path()
 
         public function authorize()
         {
-            return false; // доступ к маршруту неавториированиому польователю запрещен
+            return false; // РґРѕСЃС‚СѓРї Рє РјР°СЂС€СЂСѓС‚Сѓ РЅРµР°РІС‚РѕСЂРёРёСЂРѕРІР°РЅРёРѕРјСѓ РїРѕР»СЊРѕРІР°С‚РµР»СЋ Р·Р°РїСЂРµС‰РµРЅ
         }
         public function rules()
            {
                return [
-                       'name' => 'required|max:10', // | - правила отделяются  : - параметр
+                       'name' => 'required|max:10', // | - РїСЂР°РІРёР»Р° РѕС‚РґРµР»СЏСЋС‚СЃСЏ  : - РїР°СЂР°РјРµС‚СЂ
                        'email' => 'required|email',
                ];
            }
 
-        -в контроллере:
+        -РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
 
            public function show(ContactRequest $contactRequest, $id = false) {
 
@@ -920,112 +920,112 @@ public_path()
                             'name' => 'required',
                         ], $messages);
 
-                        if($validator->fails){ //true если были ошибки
+                        if($validator->fails){ //true РµСЃР»Рё Р±С‹Р»Рё РѕС€РёР±РєРё
                             return redirect()->route('home')->withErrors($validator)->withInput();
                         }
                 }
             }
 
-        -Сообщения ошибок валидации:
+        -РЎРѕРѕР±С‰РµРЅРёСЏ РѕС€РёР±РѕРє РІР°Р»РёРґР°С†РёРё:
             C:\OpenServer\OSPanel\domains\mylar\resources\lang\en\validation.php
 
             'custom' => [
                 'name' => [
-                    'required' => 'Поле обяательно',
+                    'required' => 'РџРѕР»Рµ РѕР±СЏР°С‚РµР»СЊРЅРѕ',
                 ],
                 'email' => [
-                    'max' => 'максимально - :max',
+                    'max' => 'РјР°РєСЃРёРјР°Р»СЊРЅРѕ - :max',
                 ],
             ],
 
-            или:
-            // если написаны тут то приоритет №1
-            в ContactRequest
+            РёР»Рё:
+            // РµСЃР»Рё РЅР°РїРёСЃР°РЅС‹ С‚СѓС‚ С‚Рѕ РїСЂРёРѕСЂРёС‚РµС‚ в„–1
+            РІ ContactRequest
                 public function messages(){
                     return [
-                        'required' => 'Поле :attribute обяательно', //для всех
-                        'email.required' => 'Поле :attribute обяательно', //для поля email
+                        'required' => 'РџРѕР»Рµ :attribute РѕР±СЏР°С‚РµР»СЊРЅРѕ', //РґР»СЏ РІСЃРµС…
+                        'email.required' => 'РџРѕР»Рµ :attribute РѕР±СЏР°С‚РµР»СЊРЅРѕ', //РґР»СЏ РїРѕР»СЏ email
                     ];
                 }
             
 
-            -в контроллере:
-            $messages = $validator->errors();  // просто что б знать
+            -РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
+            $messages = $validator->errors();  // РїСЂРѕСЃС‚Рѕ С‡С‚Рѕ Р± Р·РЅР°С‚СЊ
             
-            $messages->get('name'); // все сообщения к поля name  
-            $messages->all(); // все сообщения какие прописаны 
+            $messages->get('name'); // РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ Рє РїРѕР»СЏ name  
+            $messages->all(); // РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ РєР°РєРёРµ РїСЂРѕРїРёСЃР°РЅС‹ 
             if($messages->has('name')){
-                $messages->all('<p> :message </p>'); // обернет все сообщения
+                $messages->all('<p> :message </p>'); // РѕР±РµСЂРЅРµС‚ РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ
             }
 
-            $validator->after(function(){ // любое действие сразу после валидации
-                $validator->errors()->add('name', 'дополнительно');
+            $validator->after(function(){ // Р»СЋР±РѕРµ РґРµР№СЃС‚РІРёРµ СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ РІР°Р»РёРґР°С†РёРё
+                $validator->errors()->add('name', 'РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕ');
             });
 
-===АУТЕНТИФИКАЦИЯ
+===РђРЈРўР•РќРўРР¤РРљРђР¦РРЇ
     
 
     C:\OpenServer\OSPanel\domains\mylar\config\auth.php
 
-    -генерация шаблонов аутентификации во view
+    -РіРµРЅРµСЂР°С†РёСЏ С€Р°Р±Р»РѕРЅРѕРІ Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёРё РІРѕ view
         php artisan make:auth
 
-        php artisan route:list - все маршруты
+        php artisan route:list - РІСЃРµ РјР°СЂС€СЂСѓС‚С‹
 
-    - добавим на роутер:
+    - РґРѕР±Р°РІРёРј РЅР° СЂРѕСѓС‚РµСЂ:
         Route::get('/', 'FirstController@show')->middleware('auth');
 
-        посредники передают управление по цепочке 
-            web - подключает сессии
-            auth - аутентификация 
+        РїРѕСЃСЂРµРґРЅРёРєРё РїРµСЂРµРґР°СЋС‚ СѓРїСЂР°РІР»РµРЅРёРµ РїРѕ С†РµРїРѕС‡РєРµ 
+            web - РїРѕРґРєР»СЋС‡Р°РµС‚ СЃРµСЃСЃРёРё
+            auth - Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёСЏ 
 
-        // добавляем префикс admin (admin/edit/post или admin/create/post)
+        // РґРѕР±Р°РІР»СЏРµРј РїСЂРµС„РёРєСЃ admin (admin/edit/post РёР»Рё admin/create/post)
             Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function(){
                 Route::get('/', 'Admin\AdminController@index')->name('admin');
              });
 
-        или в контроллере:
+        РёР»Рё РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
             public function __construct(){
                 $this->middleware('auth');
             }
 
-            ThrottlesLogins -количество неверных попыток
+            ThrottlesLogins -РєРѕР»РёС‡РµСЃС‚РІРѕ РЅРµРІРµСЂРЅС‹С… РїРѕРїС‹С‚РѕРє
 
-            если вместо email login то после добавления именени в формы 
+            РµСЃР»Рё РІРјРµСЃС‚Рѕ email login С‚Рѕ РїРѕСЃР»Рµ РґРѕР±Р°РІР»РµРЅРёСЏ РёРјРµРЅРµРЅРё РІ С„РѕСЂРјС‹ 
                 C:\OpenServer\OSPanel\domains\mylar\vendor\laravel\framework\src\Illuminate\Foundation\Auth\AuthenticatesUsers.php
                 public function username()
                     {
                         return 'login';
                     }
 
-===Методы фасада Auth
+===РњРµС‚РѕРґС‹ С„Р°СЃР°РґР° Auth
 
-        -в контроллере:
-            $user = Auth::user(); .. все данные аут пользователя
-        или
+        -РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
+            $user = Auth::user(); .. РІСЃРµ РґР°РЅРЅС‹Рµ Р°СѓС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+        РёР»Рё
             $user = $request->user();
 
-            if(!Auth:check()) // если не испольовать  $this->middleware('auth');
+            if(!Auth:check()) // РµСЃР»Рё РЅРµ РёСЃРїРѕР»СЊРѕРІР°С‚СЊ  $this->middleware('auth');
                 return redirect('/login');
 
-            Auth::id(); // id в таблице
-            Auth::viaRemember(); // true если пользователь выбрал запомнить меня
+            Auth::id(); // id РІ С‚Р°Р±Р»РёС†Рµ
+            Auth::viaRemember(); // true РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РІС‹Р±СЂР°Р» Р·Р°РїРѕРјРЅРёС‚СЊ РјРµРЅСЏ
 
-        или
+        РёР»Рё
             
             $user = User::find(1);
-            Auth::login($user); // вручную аутентификация
-            или 
-            Auth::guard('session')->login($user); // или web 
-            или 
-            Auth::loginUsingId(7); // или web 
+            Auth::login($user); // РІСЂСѓС‡РЅСѓСЋ Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёСЏ
+            РёР»Рё 
+            Auth::guard('session')->login($user); // РёР»Рё web 
+            РёР»Рё 
+            Auth::loginUsingId(7); // РёР»Рё web 
             
 
-            Auth::guard('session')->logout(); // или web 
+            Auth::guard('session')->logout(); // РёР»Рё web 
 
             
 
-        - созд свой контроллер:
+        - СЃРѕР·Рґ СЃРІРѕР№ РєРѕРЅС‚СЂРѕР»Р»РµСЂ:
         php artisan make:controller Auth\MyAuthController
 
             public function showLogin() {
@@ -1039,25 +1039,25 @@ public_path()
                 $remember = $request->has('remember');
 
 
-                $result = Auth::attempt([  // проверяет есть ли такой польователь
+                $result = Auth::attempt([  // РїСЂРѕРІРµСЂСЏРµС‚ РµСЃС‚СЊ Р»Рё С‚Р°РєРѕР№ РїРѕР»СЊРѕРІР°С‚РµР»СЊ
                     'login' => $arr['login'],
                     'password' => $arr['password'],   
                 ], $remember);
 
                 if($result){
-                        return redirect()->intended(); // перенаправит куда хотел
+                        return redirect()->intended(); // РїРµСЂРµРЅР°РїСЂР°РІРёС‚ РєСѓРґР° С…РѕС‚РµР»
                 }
 
                  return redirect()->back()->withInput($request->only('login', 'remember'))
                         ->withErrors([
-                            'login' => 'данные не верны',
+                            'login' => 'РґР°РЅРЅС‹Рµ РЅРµ РІРµСЂРЅС‹',
                         ]);
             }
 
-        в маршрутах:
-        //Auth::routes(); - комментим
+        РІ РјР°СЂС€СЂСѓС‚Р°С…:
+        //Auth::routes(); - РєРѕРјРјРµРЅС‚РёРј
         
-        //'middleware' => ['web'] - ПИСАТЬ НЕ НУЖНО ТАМ АВТОМАТОМ ВСЕ РОУТЫ ПРОВЕРЯЮТСЯ
+        //'middleware' => ['web'] - РџРРЎРђРўР¬ РќР• РќРЈР–РќРћ РўРђРњ РђР’РўРћРњРђРўРћРњ Р’РЎР• Р РћРЈРўР« РџР РћР’Р•Р РЇР®РўРЎРЇ
         //Route::group(['prefix' => 'admin'], function(){
         Route::group(['prefix' => 'admin', 'middleware' => ['web']], function(){
  
@@ -1066,19 +1066,19 @@ public_path()
     
         });
 
-        есть еще баовая аутентификация:
-            'auth.basic' - это как htaccess password
+        РµСЃС‚СЊ РµС‰Рµ Р±Р°РѕРІР°СЏ Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёСЏ:
+            'auth.basic' - СЌС‚Рѕ РєР°Рє htaccess password
         Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth.basic']], function(){
         });
 
-===ПРАВА ПОЛЬОВАТЕЛЯ
-    - рарешение для раных польователей:
+===РџР РђР’Рђ РџРћР›Р¬РћР’РђРўР•Р›РЇ
+    - СЂР°СЂРµС€РµРЅРёРµ РґР»СЏ СЂР°РЅС‹С… РїРѕР»СЊРѕРІР°С‚РµР»РµР№:
     C:\OpenServer\OSPanel\domains\mylar\vendor\laravel\framework\src\Illuminate\Auth\Access\Gate.php
-    и
+    Рё
     C:\OpenServer\OSPanel\domains\mylar\app\Providers\AuthServiceProvider.php
-        // нужно создать табл roles и поле в sers role_id
+        // РЅСѓР¶РЅРѕ СЃРѕР·РґР°С‚СЊ С‚Р°Р±Р» roles Рё РїРѕР»Рµ РІ sers role_id
         
-        - новое разрешение \ правило да = true  нет = false:
+        - РЅРѕРІРѕРµ СЂР°Р·СЂРµС€РµРЅРёРµ \ РїСЂР°РІРёР»Рѕ РґР° = true  РЅРµС‚ = false:
              public function boot()
                 Gate::define('update-post', function (User $user) {
                     if($user->role->name == 'Admin'){
@@ -1087,25 +1087,25 @@ public_path()
                     return false
                 });
 
-        - в контроллере:
-            if(Gate::denise('update-post')) // возвр истину если запрещино
-                return redirect()->back()->with(['message' => 'нет прав']);
+        - РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
+            if(Gate::denise('update-post')) // РІРѕР·РІСЂ РёСЃС‚РёРЅСѓ РµСЃР»Рё Р·Р°РїСЂРµС‰РёРЅРѕ
+                return redirect()->back()->with(['message' => 'РЅРµС‚ РїСЂР°РІ']);
 
-            if(Gate::allows('update-post', $article)){ // возвр истину если рарешино 
+            if(Gate::allows('update-post', $article)){ // РІРѕР·РІСЂ РёСЃС‚РёРЅСѓ РµСЃР»Рё СЂР°СЂРµС€РёРЅРѕ 
                 $user->articles()->save($article)
             }
 
-            if(Gate::forUser(1)->allows('update-post', $article)){ // возвр истину если рарешино  для юзера 
+            if(Gate::forUser(1)->allows('update-post', $article)){ // РІРѕР·РІСЂ РёСЃС‚РёРЅСѓ РµСЃР»Рё СЂР°СЂРµС€РёРЅРѕ  РґР»СЏ СЋР·РµСЂР° 
 
 
 
-===ПОЛИТИКА АВТОРИАЦИИ
+===РџРћР›РРўРРљРђ РђР’РўРћР РРђР¦РР
 
-        - это набор правил для конкретной модели авторизации
+        - СЌС‚Рѕ РЅР°Р±РѕСЂ РїСЂР°РІРёР» РґР»СЏ РєРѕРЅРєСЂРµС‚РЅРѕР№ РјРѕРґРµР»Рё Р°РІС‚РѕСЂРёР·Р°С†РёРё
 
-            рhp artisan make:policy ArticlePolicy
+            СЂhp artisan make:policy ArticlePolicy
 
-        - регистрируем политику в 
+        - СЂРµРіРёСЃС‚СЂРёСЂСѓРµРј РїРѕР»РёС‚РёРєСѓ РІ 
             C:\OpenServer\OSPanel\domains\mylar\app\Providers\AuthServiceProvider.php
             
             use App\Article;
@@ -1116,109 +1116,109 @@ public_path()
                 Article::class => ArticlePolicy::class,
             ];
         
-        - в ArticlePolicy:
+        - РІ ArticlePolicy:
             
             use App\User;
 
-            public function add(User $user){ // добавление articles в бд
+            public function add(User $user){ // РґРѕР±Р°РІР»РµРЅРёРµ articles РІ Р±Рґ
                 
                     if($user->role->name == 'Admin'){
                         return true;
                     }
                     return false
             }
-            public function update(User $user, Article $article){ // изменение articles в бд
+            public function update(User $user, Article $article){ // РёР·РјРµРЅРµРЅРёРµ articles РІ Р±Рґ
                         if($user->id == $article->ser_id){ return true;}
                         else{ return false;}
 
             }
 
-            public function before(User $user){ // вызывается всегда раньше других методов
-                // и он в приоритете
+            public function before(User $user){ // РІС‹Р·С‹РІР°РµС‚СЃСЏ РІСЃРµРіРґР° СЂР°РЅСЊС€Рµ РґСЂСѓРіРёС… РјРµС‚РѕРґРѕРІ
+                // Рё РѕРЅ РІ РїСЂРёРѕСЂРёС‚РµС‚Рµ
                 if($user->role->name == 'Admin'){
                     return true;
                 }
                 return false
             }
 
-         - в контроллере:
-                $article = new Article; // пусто обьект
-                if(Gate::denise('add', $article)) // возвр истину если запрещино
-                        return redirect()->back()->with(['message' => 'нет прав']);
+         - РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
+                $article = new Article; // РїСѓСЃС‚Рѕ РѕР±СЊРµРєС‚
+                if(Gate::denise('add', $article)) // РІРѕР·РІСЂ РёСЃС‚РёРЅСѓ РµСЃР»Рё Р·Р°РїСЂРµС‰РёРЅРѕ
+                        return redirect()->back()->with(['message' => 'РЅРµС‚ РїСЂР°РІ']);
 
 
                 $article = Article::find(1);         
-                if(Gate::allows('update', $article)){ // возвр истину если рарешино 
+                if(Gate::allows('update', $article)){ // РІРѕР·РІСЂ РёСЃС‚РёРЅСѓ РµСЃР»Рё СЂР°СЂРµС€РёРЅРѕ 
                     $user->articles()->save($article)
                 }
 
-                или
-                $article = new Article; // пусто обьект 
-                if($request->user()->cannot('add', $article)) // или can возвр истину если запрещино
-                        return redirect()->back()->with(['message' => 'нет прав']);
+                РёР»Рё
+                $article = new Article; // РїСѓСЃС‚Рѕ РѕР±СЊРµРєС‚ 
+                if($request->user()->cannot('add', $article)) // РёР»Рё can РІРѕР·РІСЂ РёСЃС‚РёРЅСѓ РµСЃР»Рё Р·Р°РїСЂРµС‰РёРЅРѕ
+                        return redirect()->back()->with(['message' => 'РЅРµС‚ РїСЂР°РІ']);
 
 
-                еще есть вариант с возвратом респонс 403:
-                     $article = Article::find(1); // пусто обьект
+                РµС‰Рµ РµСЃС‚СЊ РІР°СЂРёР°РЅС‚ СЃ РІРѕР·РІСЂР°С‚РѕРј СЂРµСЃРїРѕРЅСЃ 403:
+                     $article = Article::find(1); // РїСѓСЃС‚Рѕ РѕР±СЊРµРєС‚
                      $this->autorize('add', $article);
-                     или 
+                     РёР»Рё 
                      $user = Auth::user()
                      $this->autorizeForUser($user, 'add', $article);
 
-        - в шаблоне:
+        - РІ С€Р°Р±Р»РѕРЅРµ:
             @can('add', $article)
-                добавить
+                РґРѕР±Р°РІРёС‚СЊ
             @else
-                не добавить
+                РЅРµ РґРѕР±Р°РІРёС‚СЊ
             @endcan;
 
 
-===СЕССИИ
-    - вкл: 
+===РЎР•РЎРЎРР
+    - РІРєР»: 
         C:\OpenServer\OSPanel\domains\mylar\app\Http\Kernel.php
         'web' => [ \Illuminate\Session\Middleware\StartSession::class,]
      
-    -настройка:
+    -РЅР°СЃС‚СЂРѕР№РєР°:
         C:\OpenServer\OSPanel\domains\mylar\config\session.php
-             'expire_on_close' => true, - будет пропадать сессия при закрытии браузера 
+             'expire_on_close' => true, - Р±СѓРґРµС‚ РїСЂРѕРїР°РґР°С‚СЊ СЃРµСЃСЃРёСЏ РїСЂРё Р·Р°РєСЂС‹С‚РёРё Р±СЂР°СѓР·РµСЂР° 
 
-    - если хранить в бд, то:
+    - РµСЃР»Рё С…СЂР°РЅРёС‚СЊ РІ Р±Рґ, С‚Рѕ:
         'driver' => env('SESSION_DRIVER', 'database'), 
-        // начение по умолчанию, 
-        //а исходное в C:\OpenServer\OSPanel\domains\mylar\.env
+        // РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, 
+        //Р° РёСЃС…РѕРґРЅРѕРµ РІ C:\OpenServer\OSPanel\domains\mylar\.env
         
-        php artisan session:table // миграция 
+        php artisan session:table // РјРёРіСЂР°С†РёСЏ 
         php artisan migrate
     
-    -в бд медленно в file быстрее
+    -РІ Р±Рґ РјРµРґР»РµРЅРЅРѕ РІ file Р±С‹СЃС‚СЂРµРµ
 
-    -в конторллере:
+    -РІ РєРѕРЅС‚РѕСЂР»Р»РµСЂРµ:
         public function store(Request $request) {
         $request->session()->get('key', 'default');
         $request->session()->all();
-        $request->session()->put('key', 'value'); //если key.first - массив
+        $request->session()->put('key', 'value'); //РµСЃР»Рё key.first - РјР°СЃСЃРёРІ
         $request->session()->has('key');
 
-        // если добавить значение в массив:
+        // РµСЃР»Рё РґРѕР±Р°РІРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ РІ РјР°СЃСЃРёРІ:
             $request->session()->put('key.first', 'value');
-            $request->session()->push('key.second', 'value'); // будет добавлятся постоянно начение в second
+            $request->session()->push('key.second', 'value'); // Р±СѓРґРµС‚ РґРѕР±Р°РІР»СЏС‚СЃСЏ РїРѕСЃС‚РѕСЏРЅРЅРѕ РЅР°С‡РµРЅРёРµ РІ second
         
-        ИЛИ 
-            session('key'); // получить значение
-            session(['key2' => 'val']); // добавить значение
+        РР›Р 
+            session('key'); // РїРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ
+            session(['key2' => 'val']); // РґРѕР±Р°РІРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ
 
-    - в шаблоне:
+    - РІ С€Р°Р±Р»РѕРЅРµ:
         {{ dump(Session::all()) }}  {{ session('var') }}
 
-    - удаляем сесссию
+    - СѓРґР°Р»СЏРµРј СЃРµСЃСЃСЃРёСЋ
         SESSION::forget('key');
-        SESSION::flush(); // полностью
-        SESSION::pull('key'); // вернет и удалит ключ сессию
-        SESSION::flash('key', 'val'); // создаст и удалит ключ сессию на один апрос
-        SESSION::reflash() // продлены flash еще на один запрос
+        SESSION::flush(); // РїРѕР»РЅРѕСЃС‚СЊСЋ
+        SESSION::pull('key'); // РІРµСЂРЅРµС‚ Рё СѓРґР°Р»РёС‚ РєР»СЋС‡ СЃРµСЃСЃРёСЋ
+        SESSION::flash('key', 'val'); // СЃРѕР·РґР°СЃС‚ Рё СѓРґР°Р»РёС‚ РєР»СЋС‡ СЃРµСЃСЃРёСЋ РЅР° РѕРґРёРЅ Р°РїСЂРѕСЃ
+        SESSION::reflash() // РїСЂРѕРґР»РµРЅС‹ flash РµС‰Рµ РЅР° РѕРґРёРЅ Р·Р°РїСЂРѕСЃ
 
-===Обработка событий
-    - реистрируем обрабочик
+===РћР±СЂР°Р±РѕС‚РєР° СЃРѕР±С‹С‚РёР№
+    - СЂРµРёСЃС‚СЂРёСЂСѓРµРј РѕР±СЂР°Р±РѕС‡РёРє
     C:\OpenServer\OSPanel\domains\mylar\app\Providers\EventServiceProvider.php
     
     protected $listen = [
@@ -1226,18 +1226,18 @@ public_path()
             'App\Listeners\addArticleEventListener',
         ],
     ];
-    ИЛИ -->
-     public function boot(){ // тут можно арегить обработчика для события
+    РР›Р -->
+     public function boot(){ // С‚СѓС‚ РјРѕР¶РЅРѕ Р°СЂРµРіРёС‚СЊ РѕР±СЂР°Р±РѕС‚С‡РёРєР° РґР»СЏ СЃРѕР±С‹С‚РёСЏ
          Event::listen('onAddArticleEvent', function ($article, $user) {
              Log::info('Article save in DB', [$user => $article])
         }
-    // в контроллере:
+    // РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
          Event::fire('onAddArticleEvent', [$article, $user]);
     <--
     
     php artisan event:generate  
 
-- класс события:
+- РєР»Р°СЃСЃ СЃРѕР±С‹С‚РёСЏ:
 C:\OpenServer\OSPanel\domains\mylar\app\Events\onAddArticleEvent.php
     public $user_name;
     public $article_name;
@@ -1248,23 +1248,23 @@ C:\OpenServer\OSPanel\domains\mylar\app\Events\onAddArticleEvent.php
         $this->article_name = $article->name;
     }
 
-- класс обработчик:
+- РєР»Р°СЃСЃ РѕР±СЂР°Р±РѕС‚С‡РёРє:
 C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
     public function handle(onAddArticleEvent $event)
     {
         Log::info('Article save in DB', [$event->user_name => $event->article_name])
     } 
 
-- в контроллере выкинуть событие:
+- РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ РІС‹РєРёРЅСѓС‚СЊ СЃРѕР±С‹С‚РёРµ:
     Event::fire(new onAddArticleEvent($article, $user));
 
-   или
+   РёР»Рё
         event(new onAddArticleEvent($article, $user));
 
 
-ИЛИ есть стандартные события модели рег в:
-в C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php 
-    -можно зареистр слушателя для события модели (у кажд модели есть стандартные события см литературу): 
+РР›Р РµСЃС‚СЊ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ СЃРѕР±С‹С‚РёСЏ РјРѕРґРµР»Рё СЂРµРі РІ:
+РІ C:\OpenServer\OSPanel\domains\mylar\app\Providers\AppServiceProvider.php 
+    -РјРѕР¶РЅРѕ Р·Р°СЂРµРёСЃС‚СЂ СЃР»СѓС€Р°С‚РµР»СЏ РґР»СЏ СЃРѕР±С‹С‚РёСЏ РјРѕРґРµР»Рё (Сѓ РєР°Р¶Рґ РјРѕРґРµР»Рё РµСЃС‚СЊ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ СЃРѕР±С‹С‚РёСЏ СЃРј Р»РёС‚РµСЂР°С‚СѓСЂСѓ): 
 
     public function boot()
     {
@@ -1273,35 +1273,35 @@ C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
         });
 
 
-===Локализация
+===Р›РѕРєР°Р»РёР·Р°С†РёСЏ
 
         C:\OpenServer\OSPanel\domains\mylar\resources\lang\
 
 
         return [ 
-                'welcome' => 'Добропожаловать :name',
-                'apple' =>  'яблоко|яблока|яблок' // варианты перевода
+                'welcome' => 'Р”РѕР±СЂРѕРїРѕР¶Р°Р»РѕРІР°С‚СЊ :name',
+                'apple' =>  'СЏР±Р»РѕРєРѕ|СЏР±Р»РѕРєР°|СЏР±Р»РѕРє' // РІР°СЂРёР°РЅС‚С‹ РїРµСЂРµРІРѕРґР°
                 'apples' =>  '{0}var1|[1,19]Var2|[22,inf]var3',  
                 ];
 
 
         C:\OpenServer\OSPanel\domains\mylar\config\app.php
              'locale' => 'en',
-             'fallback_locale' => 'en', // альтернативная локализация 
+             'fallback_locale' => 'en', // Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅР°СЏ Р»РѕРєР°Р»РёР·Р°С†РёСЏ 
 
 
-        -в контроллере:
-        //[ 'welcome' => 'Добропожаловать :name' ];
-        Lang::get('messages.welcome', ['name' => 'Ben']); //messages - имя файла , key - имя ячеки
-        Lang::choice('messages.apple', 1); // или 22 и т.д.
+        -РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
+        //[ 'welcome' => 'Р”РѕР±СЂРѕРїРѕР¶Р°Р»РѕРІР°С‚СЊ :name' ];
+        Lang::get('messages.welcome', ['name' => 'Ben']); //messages - РёРјСЏ С„Р°Р№Р»Р° , key - РёРјСЏ СЏС‡РµРєРё
+        Lang::choice('messages.apple', 1); // РёР»Рё 22 Рё С‚.Рґ.
         Lang::has('messages.apple')
 
 
 
-===КОНТРАКТЫ
+===РљРћРќРўР РђРљРўР«
 
-    -это интерфес "КОНТРАКТ"
-        C:\OpenServer\OSPanel\domains\mylar\app\Helpers\Contracts\SaveSt.php - любой сам пиши
+    -СЌС‚Рѕ РёРЅС‚РµСЂС„РµСЃ "РљРћРќРўР РђРљРў"
+        C:\OpenServer\OSPanel\domains\mylar\app\Helpers\Contracts\SaveSt.php - Р»СЋР±РѕР№ СЃР°Рј РїРёС€Рё
     
         namespace App\Helers\Contracts;
         use Illuminate\Http\Request;
@@ -1315,7 +1315,7 @@ C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
 
         }
     
-    -реализатор контракта: может быть много а контракт один
+    -СЂРµР°Р»РёР·Р°С‚РѕСЂ РєРѕРЅС‚СЂР°РєС‚Р°: РјРѕР¶РµС‚ Р±С‹С‚СЊ РјРЅРѕРіРѕ Р° РєРѕРЅС‚СЂР°РєС‚ РѕРґРёРЅ
         C:\OpenServer\OSPanel\domains\mylar\app\Helpers\SaveEloqentOrm.php
 
         namespace App\Helers;
@@ -1339,17 +1339,17 @@ C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
         }
 
 
-===СЕРВИС ПРОВАЙДЕР
+===РЎР•Р Р’РРЎ РџР РћР’РђР™Р”Р•Р 
     
-    - для первоначально загрузки функционала
-    - реистрация классов
-    - политик, событий, шаблонизаторы 
-    - привяка контракта к исполнителю
+    - РґР»СЏ РїРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅРѕ Р·Р°РіСЂСѓР·РєРё С„СѓРЅРєС†РёРѕРЅР°Р»Р°
+    - СЂРµРёСЃС‚СЂР°С†РёСЏ РєР»Р°СЃСЃРѕРІ
+    - РїРѕР»РёС‚РёРє, СЃРѕР±С‹С‚РёР№, С€Р°Р±Р»РѕРЅРёР·Р°С‚РѕСЂС‹ 
+    - РїСЂРёРІСЏРєР° РєРѕРЅС‚СЂР°РєС‚Р° Рє РёСЃРїРѕР»РЅРёС‚РµР»СЋ
     
-    -при загруке laravel опрашует все доступные провадеры и вызывает метод register каждого провайдера
-    таким обраом в сервис контенере рег все классы
+    -РїСЂРё Р·Р°РіСЂСѓРєРµ laravel РѕРїСЂР°С€СѓРµС‚ РІСЃРµ РґРѕСЃС‚СѓРїРЅС‹Рµ РїСЂРѕРІР°РґРµСЂС‹ Рё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ register РєР°Р¶РґРѕРіРѕ РїСЂРѕРІР°Р№РґРµСЂР°
+    С‚Р°РєРёРј РѕР±СЂР°РѕРј РІ СЃРµСЂРІРёСЃ РєРѕРЅС‚РµРЅРµСЂРµ СЂРµРі РІСЃРµ РєР»Р°СЃСЃС‹
 
-    Создание своего провайдера (будет регистрировать реализаторов контракта SaveStr):
+    РЎРѕР·РґР°РЅРёРµ СЃРІРѕРµРіРѕ РїСЂРѕРІР°Р№РґРµСЂР° (Р±СѓРґРµС‚ СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ СЂРµР°Р»РёР·Р°С‚РѕСЂРѕРІ РєРѕРЅС‚СЂР°РєС‚Р° SaveStr):
 
     php artisan make:provider SaveStrServiceProvider
 
@@ -1369,66 +1369,66 @@ C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
             //
         }
 
-        // связуем реализатор с контрактом
+        // СЃРІСЏР·СѓРµРј СЂРµР°Р»РёР·Р°С‚РѕСЂ СЃ РєРѕРЅС‚СЂР°РєС‚РѕРј
         public function register()
         {
-            $this->app->bind('App\Helers\Contracts\SaveSt', function(){ // привязка кажды выов - новы обьект
+            $this->app->bind('App\Helers\Contracts\SaveSt', function(){ // РїСЂРёРІСЏР·РєР° РєР°Р¶РґС‹ РІС‹РѕРІ - РЅРѕРІС‹ РѕР±СЊРµРєС‚
                 return new SaveEloqentOrm;
                 //return new SaveFile;
             });
             
-            или
+            РёР»Рё
 
             $this->app->bind('App\Helers\Contracts\SaveSt', 'App\Helers\SaveEloqentOrm');
 
-            или 
+            РёР»Рё 
 
-            $this->app->singleton('App\Helers\Contracts\SaveSt', function(){ // привязка лучше сингелтон
+            $this->app->singleton('App\Helers\Contracts\SaveSt', function(){ // РїСЂРёРІСЏР·РєР° Р»СѓС‡С€Рµ СЃРёРЅРіРµР»С‚РѕРЅ
                 //return new SaveEloqentOrm;
                 return new SaveFile;
             });
 
-            или 
+            РёР»Рё 
             $obj = new SaveEloqentOrm;
             $this->app->instance('App\Helers\Contracts\SaveSt', $obj);
 
 
 
-            // доступ внутри провадера :
+            // РґРѕСЃС‚СѓРї РІРЅСѓС‚СЂРё РїСЂРѕРІР°РґРµСЂР° :
             $this->app['App\Helers\Contracts\SaveSt'];
-            или 
+            РёР»Рё 
             $this->app->make('App\Helers\Contracts\SaveSt'); 
             dd(); - dump 
         }
     }
 
-    - реистр нашего провайдера:
+    - СЂРµРёСЃС‚СЂ РЅР°С€РµРіРѕ РїСЂРѕРІР°Р№РґРµСЂР°:
         C:\OpenServer\OSPanel\domains\mylar\config\app.php
 
      'providers' => [ App\Providers\SaveStrServiceProvider::class];
 
-     - в контроллере:
+     - РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
          public function store(Request $request, SaveSt $saveSt) {
-         // laravel обратится и найдет что к 'App\Helers\Contracts\SaveSt' привязан обьект return new SaveEloqentOrm;
-         и тут работаем с методами уже SaveEloqentOrm
+         // laravel РѕР±СЂР°С‚РёС‚СЃСЏ Рё РЅР°Р№РґРµС‚ С‡С‚Рѕ Рє 'App\Helers\Contracts\SaveSt' РїСЂРёРІСЏР·Р°РЅ РѕР±СЊРµРєС‚ return new SaveEloqentOrm;
+         Рё С‚СѓС‚ СЂР°Р±РѕС‚Р°РµРј СЃ РјРµС‚РѕРґР°РјРё СѓР¶Рµ SaveEloqentOrm
 
         $saveSt->save($request, Auth::user());
 
 
-===Сервис-контейнер
-    - хранит инфу о зареистр сервисах
+===РЎРµСЂРІРёСЃ-РєРѕРЅС‚РµР№РЅРµСЂ
+    - С…СЂР°РЅРёС‚ РёРЅС„Сѓ Рѕ Р·Р°СЂРµРёСЃС‚СЂ СЃРµСЂРІРёСЃР°С…
 
-    через зависимость:
+    С‡РµСЂРµР· Р·Р°РІРёСЃРёРјРѕСЃС‚СЊ:
         save(Request $request, SaveSt $saveSt) 
-    или:
+    РёР»Рё:
         $var = App::make('App\Helers\Contracts\SaveSt');
-        или App::make('SaveSt'); если $this->app->singleton('SaveSt',  - просто строка, но так лучше не делать
+        РёР»Рё App::make('SaveSt'); РµСЃР»Рё $this->app->singleton('SaveSt',  - РїСЂРѕСЃС‚Рѕ СЃС‚СЂРѕРєР°, РЅРѕ С‚Р°Рє Р»СѓС‡С€Рµ РЅРµ РґРµР»Р°С‚СЊ
         $var->save($request, Auth::user());
 
 
 
-===ФАСАДЫ
-    это статические интерфесы зарег в серв контейнере 
+===Р¤РђРЎРђР”Р«
+    СЌС‚Рѕ СЃС‚Р°С‚РёС‡РµСЃРєРёРµ РёРЅС‚РµСЂС„РµСЃС‹ Р·Р°СЂРµРі РІ СЃРµСЂРІ РєРѕРЅС‚РµР№РЅРµСЂРµ 
 
     C:\OpenServer\OSPanel\domains\mylar\app\Helpers\Facades\SaveSt.php
 
@@ -1439,8 +1439,8 @@ C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
     class SaveSt extends Facade{
 
         protected static function getFacadeAccessor() { 
-            // обьяателен  к какому зарег классу и контенера вы обращаетесь с помоще этоо фасада 
-            // вовращает ключ ячейки сервис - контейнера
+            // РѕР±СЊСЏР°С‚РµР»РµРЅ  Рє РєР°РєРѕРјСѓ Р·Р°СЂРµРі РєР»Р°СЃСЃСѓ Рё РєРѕРЅС‚РµРЅРµСЂР° РІС‹ РѕР±СЂР°С‰Р°РµС‚РµСЃСЊ СЃ РїРѕРјРѕС‰Рµ СЌС‚РѕРѕ С„Р°СЃР°РґР° 
+            // РІРѕРІСЂР°С‰Р°РµС‚ РєР»СЋС‡ СЏС‡РµР№РєРё СЃРµСЂРІРёСЃ - РєРѕРЅС‚РµР№РЅРµСЂР°
             return 'savest';
         }
 
@@ -1453,7 +1453,7 @@ C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
         });
 
 
-    - псевдоним для фасада:
+    - РїСЃРµРІРґРѕРЅРёРј РґР»СЏ С„Р°СЃР°РґР°:
 
         C:\OpenServer\OSPanel\domains\mylar\config\app.php
 
@@ -1461,16 +1461,16 @@ C:\OpenServer\OSPanel\domains\mylar\app\Listeners\addArticleEventListener.php
           'SaveSt' => App\Helers\Facades\SaveSt::class,
         ]
 
-    - в контроллере:
+    - РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
 
         use SaveSt; 
 
         SaveSt::save();
 
-===ПОЧТА
+===РџРћР§РўРђ
 C:\OpenServer\OSPanel\domains\loc\config\mail.php
 C:\OpenServer\OSPanel\domains\loc\.env
-    - на шаблоне:
+    - РЅР° С€Р°Р±Р»РѕРЅРµ:
         @if(count($errors) > 0 )
             <div class='alert alert-danger'>
                 @foreach($errors->all() as $error)
@@ -1478,15 +1478,15 @@ C:\OpenServer\OSPanel\domains\loc\.env
                 @endforeach
             </div>
         @endif
-    -в контроллере:
+    -РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ:
         $data = $request->all();
         $result = Mail::send('site.email', ['data' => $data], function($message) use ($data) {
             $mail_admin = env('MAIL_ADMIN');    
             $message->from($data['email'], $data['name']);
-            $message->to($mail_admin)->subject('тема');
-        }); //site.email - шаблон во view 
+            $message->to($mail_admin)->subject('С‚РµРјР°');
+        }); //site.email - С€Р°Р±Р»РѕРЅ РІРѕ view 
         
-    -в email.blade.php: // site - каталог
+    -РІ email.blade.php: // site - РєР°С‚Р°Р»РѕРі
             <h3>{{ $data['name']}} </h3>
         C:\OpenServer\OSPanel\userdata\temp\email
 
@@ -1495,15 +1495,15 @@ C:\OpenServer\OSPanel\domains\loc\.env
 ===PART TWO=== 
 
 
-===ПАКЕТЫ
+===РџРђРљР•РўР«
     https://laravelcollective.com/docs/master/html
-===шаблон
+===С€Р°Р±Р»РѕРЅ
     https://www.themezy.com/free-website-templates/97-unique-free-responsive-website-template
 
 
 class People extends Model
 {
-    protected $table = 'peoples'; // если таблица имеет другое имя чем модель
+    protected $table = 'peoples'; // РµСЃР»Рё С‚Р°Р±Р»РёС†Р° РёРјРµРµС‚ РґСЂСѓРіРѕРµ РёРјСЏ С‡РµРј РјРѕРґРµР»СЊ
 }
 
 
@@ -1514,9 +1514,9 @@ class People extends Model
  $tags = DB::table('portfolios')->distinct()->pluck('filter');
 
 
-'middleware' => 'web' - там для форм проверка {{csrf_field()}} // она по умолчанию 
+'middleware' => 'web' - С‚Р°Рј РґР»СЏ С„РѕСЂРј РїСЂРѕРІРµСЂРєР° {{csrf_field()}} // РѕРЅР° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ 
 
-===ФАЙЛЫ
+===Р¤РђР™Р›Р«
 
     if($request->hasFile('images'))
         $file = $request->file('images');
@@ -1524,17 +1524,17 @@ class People extends Model
         $path = $request->images->store('mufolder');
 
         $page = new Page($input);
-        или 
+        РёР»Рё 
         $page->fill($input);
         
 
         $page->save();
-	или 
+	РёР»Рё 
 	$page->update(); 
 
 
-если в маршруте передается идентификатор, то в методе контроллера можно (Page $page)
-и не надо find так как фрамворк сам надет сразу в переменно page 
+РµСЃР»Рё РІ РјР°СЂС€СЂСѓС‚Рµ РїРµСЂРµРґР°РµС‚СЃСЏ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ, С‚Рѕ РІ РјРµС‚РѕРґРµ РєРѕРЅС‚СЂРѕР»Р»РµСЂР° РјРѕР¶РЅРѕ (Page $page)
+Рё РЅРµ РЅР°РґРѕ find С‚Р°Рє РєР°Рє С„СЂР°РјРІРѕСЂРє СЃР°Рј РЅР°РґРµС‚ СЃСЂР°Р·Сѓ РІ РїРµСЂРµРјРµРЅРЅРѕ page 
 
 {{ method_field('DELETE') }} // inut type hidden name _method value delete
 
@@ -1546,10 +1546,10 @@ if($request->isMethod('delete')){ $page->delete(); }
 
 ===PART THREE===
 
-1) сменить пространство имен:
+1) СЃРјРµРЅРёС‚СЊ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРѕ РёРјРµРЅ:
     php artisan app:name Hi
 
-2) делаем мирации:
+2) РґРµР»Р°РµРј РјРёСЂР°С†РёРё:
     php artisan make:migration CreatePotfoliosTable --create=portfolios
         $table->string('alias', 150)->unique();
         $table->string('title', 255);
@@ -1559,30 +1559,30 @@ if($request->isMethod('delete')){ $page->delete(); }
 
     php artisan migrate
 
-3) делаем привяку таблиц:
+3) РґРµР»Р°РµРј РїСЂРёРІСЏРєСѓ С‚Р°Р±Р»РёС†:
     php artisan make:migration ChangeArticlesTable --table=articles
 
         Schema::table('articles', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->default(1);
-            $table->foreign('user_id')->references('id')->on('users'); //внешний ключ 
+            $table->foreign('user_id')->references('id')->on('users'); //РІРЅРµС€РЅРёР№ РєР»СЋС‡ 
             $table->integer('category_id')->unsigned()->default(1);
-            $table->foreign('category_id')->references('id')->on('categories'); //внешний ключ 
+            $table->foreign('category_id')->references('id')->on('categories'); //РІРЅРµС€РЅРёР№ РєР»СЋС‡ 
         });
 
 4) php artisan make:auth
-    -создаст http://hi/register
+    -СЃРѕР·РґР°СЃС‚ http://hi/register
 
 5) Routes 
 
 GET POST PUT DELETE
 	resource()
-	file_get_contents('php://input'); // получает get и post не зависимо от php.ini
+	file_get_contents('php://input'); // РїРѕР»СѓС‡Р°РµС‚ get Рё post РЅРµ Р·Р°РІРёСЃРёРјРѕ РѕС‚ php.ini
 
-cURL позволяет легко выполнять любые HTTP методы для нужного ресурса.
+cURL РїРѕР·РІРѕР»СЏРµС‚ Р»РµРіРєРѕ РІС‹РїРѕР»РЅСЏС‚СЊ Р»СЋР±С‹Рµ HTTP РјРµС‚РѕРґС‹ РґР»СЏ РЅСѓР¶РЅРѕРіРѕ СЂРµСЃСѓСЂСЃР°.
 
-// будут все маршруты методов :
+// Р±СѓРґСѓС‚ РІСЃРµ РјР°СЂС€СЂСѓС‚С‹ РјРµС‚РѕРґРѕРІ :
 Route::resource('/', 'IndexController');
-или
+РёР»Рё
 Route::resource('/', 'IndexController', [
                                             'only' => ['index'],
                                             'names' => [
@@ -1590,26 +1590,26 @@ Route::resource('/', 'IndexController', [
                                             ],
                                         ]);
 
-6) содадим контроллер типа ресурс
+6) СЃРѕРґР°РґРёРј РєРѕРЅС‚СЂРѕР»Р»РµСЂ С‚РёРїР° СЂРµСЃСѓСЂСЃ
 
 php artisan make:controller IndexController --resource
 
-7) содадим родительски контроллер для всех контроллеров пользовательской части сайта :
+7) СЃРѕРґР°РґРёРј СЂРѕРґРёС‚РµР»СЊСЃРєРё РєРѕРЅС‚СЂРѕР»Р»РµСЂ РґР»СЏ РІСЃРµС… РєРѕРЅС‚СЂРѕР»Р»РµСЂРѕРІ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕР№ С‡Р°СЃС‚Рё СЃР°Р№С‚Р° :
 class IndexController extends SiteController
 
-8) - view/pink/index.blade.php // шаблон 
+8) - view/pink/index.blade.php // С€Р°Р±Р»РѕРЅ 
 
 - env THEME=pink
 
 
 - SiteController:
-    protected $p_rep;// обьект класса портфолио репозиторий
-    protected $s_rep;// слайдер
-    protected $a_rep;// статьи
-    protected $m_rep;// меню
-    protected $template;// имя шаблона для конкретной стр.
-    protected $vars;// массив переменных
-    protected $bar = FALSE;// есть ли сайт-бар
+    protected $p_rep;// РѕР±СЊРµРєС‚ РєР»Р°СЃСЃР° РїРѕСЂС‚С„РѕР»РёРѕ СЂРµРїРѕР·РёС‚РѕСЂРёР№
+    protected $s_rep;// СЃР»Р°Р№РґРµСЂ
+    protected $a_rep;// СЃС‚Р°С‚СЊРё
+    protected $m_rep;// РјРµРЅСЋ
+    protected $template;// РёРјСЏ С€Р°Р±Р»РѕРЅР° РґР»СЏ РєРѕРЅРєСЂРµС‚РЅРѕР№ СЃС‚СЂ.
+    protected $vars;// РјР°СЃСЃРёРІ РїРµСЂРµРјРµРЅРЅС‹С…
+    protected $bar = FALSE;// РµСЃС‚СЊ Р»Рё СЃР°Р№С‚-Р±Р°СЂ
     protected $contentRightBar = FALSE; 
     protected $contentLeftBar = FALSE;
 
@@ -1627,42 +1627,42 @@ class IndexController extends SiteController
         return $this->renderOutput();
     }
 
-- в каталоге pink - layouts // макет проекта site.blade.php 
+- РІ РєР°С‚Р°Р»РѕРіРµ pink - layouts // РјР°РєРµС‚ РїСЂРѕРµРєС‚Р° site.blade.php 
 {{ asset(env('THEME')) }}/images/favicon.ico
 - index:
 @extends(env('THEME').'.layouts.site')
 
-- разбиваем главны макет на части, 
-в тех местах где выризали  @yield('navigation'):
-во view для контроллера переопределяем:
+- СЂР°Р·Р±РёРІР°РµРј РіР»Р°РІРЅС‹ РјР°РєРµС‚ РЅР° С‡Р°СЃС‚Рё, 
+РІ С‚РµС… РјРµСЃС‚Р°С… РіРґРµ РІС‹СЂРёР·Р°Р»Рё  @yield('navigation'):
+РІРѕ view РґР»СЏ РєРѕРЅС‚СЂРѕР»Р»РµСЂР° РїРµСЂРµРѕРїСЂРµРґРµР»СЏРµРј:
 @section('navigation')
-можо include('navigation') 
-или 
-{!! $navigation !!} //переменная в онтроллере
+РјРѕР¶Рѕ include('navigation') 
+РёР»Рё 
+{!! $navigation !!} //РїРµСЂРµРјРµРЅРЅР°СЏ РІ РѕРЅС‚СЂРѕР»Р»РµСЂРµ
 @endsection()
 
 
 - php atisan make:model  Menu
 
-- в app содадим папу Repositories + file MenusRepository Repository - наш класс
- В REPOSITORY вносим лоику работы с БД
+- РІ app СЃРѕРґР°РґРёРј РїР°РїСѓ Repositories + file MenusRepository Repository - РЅР°С€ РєР»Р°СЃСЃ
+ Р’ REPOSITORY РІРЅРѕСЃРёРј Р»РѕРёРєСѓ СЂР°Р±РѕС‚С‹ СЃ Р‘Р”
  
 class MenusRepository extends Repository{
 
 
 
-есть пакет:
+РµСЃС‚СЊ РїР°РєРµС‚:
 composer require lavary/laravel-menu 
 
-// просто что б нать
-// Замыкания могут принимать обычные аргументы
-$message = 'мир';
+// РїСЂРѕСЃС‚Рѕ С‡С‚Рѕ Р± РЅР°С‚СЊ
+// Р—Р°РјС‹РєР°РЅРёСЏ РјРѕРіСѓС‚ РїСЂРёРЅРёРјР°С‚СЊ РѕР±С‹С‡РЅС‹Рµ Р°СЂРіСѓРјРµРЅС‚С‹
+$message = 'РјРёСЂ';
 $example = function ($arg) use ($message) {
     var_dump($arg . ', ' . $message);
 };
-$example("привет"); // привет мир
+$example("РїСЂРёРІРµС‚"); // РїСЂРёРІРµС‚ РјРёСЂ
 
-@include(env('THEME').'.customMenuItems', ['items' => $menu->roots()]) // тольо родительские
+@include(env('THEME').'.customMenuItems', ['items' => $menu->roots()]) // С‚РѕР»СЊРѕ СЂРѕРґРёС‚РµР»СЊСЃРєРёРµ
 
 @foreach($items as $item)
     <li {{ URL::current() == $item->url() ? 'class=active' : ''}} ><a href="{{ $item->url() }}">{{ $item->title }}</a></li>
@@ -1674,31 +1674,31 @@ $example("привет"); // привет мир
 @endforeach
 
 
-Локализация
+Р›РѕРєР°Р»РёР·Р°С†РёСЏ
 C:\OpenServer\OSPanel\domains\hi\resources\lang\ru\
 C:\OpenServer\OSPanel\domains\hi\config\app.php  'locale' => 'ru',
 {{ trans('ru.latest_project') }}
 
 
-пагинация
+РїР°РіРёРЅР°С†РёСЏ
 
 $users = DB::table('users')->paginate(15);
 {{ $users->links() }}
-в repository 
+РІ repository 
 if($pagination) {
     return $this->check($builder->paginate(Config::get('settings.paginate')));
 }
 
 
-если в одном материале используют несколько моделей то нужно подгружать:
+РµСЃР»Рё РІ РѕРґРЅРѕРј РјР°С‚РµСЂРёР°Р»Рµ РёСЃРїРѕР»СЊР·СѓСЋС‚ РЅРµСЃРєРѕР»СЊРєРѕ РјРѕРґРµР»РµР№ С‚Рѕ РЅСѓР¶РЅРѕ РїРѕРґРіСЂСѓР¶Р°С‚СЊ:
 
-$articles->load('model1', 'model2', 'model3'); // жадгая загруза выгодно когда много записей и связей
+$articles->load('model1', 'model2', 'model3'); // Р¶Р°РґРіР°СЏ Р·Р°РіСЂСѓР·Р° РІС‹РіРѕРґРЅРѕ РєРѕРіРґР° РјРЅРѕРіРѕ Р·Р°РїРёСЃРµР№ Рё СЃРІСЏР·РµР№
 $articles->model1->load('model12')
 
 
-если разные макеты а страница 404 одна:
+РµСЃР»Рё СЂР°Р·РЅС‹Рµ РјР°РєРµС‚С‹ Р° СЃС‚СЂР°РЅРёС†Р° 404 РѕРґРЅР°:
 app\Excetions\Handler.php
- метод render:
+ РјРµС‚РѕРґ render:
 
 	if($this->isHttpException($e)){
 	$status = $e->getStatusCode();
@@ -1708,12 +1708,12 @@ app\Excetions\Handler.php
 		return response()->view(env('THEME').'.404', []);
 
 	}
-// тут можно и логирование сделать
+// С‚СѓС‚ РјРѕР¶РЅРѕ Рё Р»РѕРіРёСЂРѕРІР°РЅРёРµ СЃРґРµР»Р°С‚СЊ
 
 
-Базовый контроллер в нем все переменные и проверка на авторизацию в остальных контр вызов parent::__construct();
+Р‘Р°Р·РѕРІС‹Р№ РєРѕРЅС‚СЂРѕР»Р»РµСЂ РІ РЅРµРј РІСЃРµ РїРµСЂРµРјРµРЅРЅС‹Рµ Рё РїСЂРѕРІРµСЂРєР° РЅР° Р°РІС‚РѕСЂРёР·Р°С†РёСЋ РІ РѕСЃС‚Р°Р»СЊРЅС‹С… РєРѕРЅС‚СЂ РІС‹Р·РѕРІ parent::__construct();
 
-Базовый :
+Р‘Р°Р·РѕРІС‹Р№ :
 __construct(){
 	if(!Auth::user())
 		abort(403);
@@ -1740,17 +1740,17 @@ function renderOutput(){
 } //
 
 function getMenu(){
-	Menu::make('adminMenu', function($menu){ // пакет нужно установить
-		$this->add('статьи', ['route' => 'admin.articles.index']);
+	Menu::make('adminMenu', function($menu){ // РїР°РєРµС‚ РЅСѓР¶РЅРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ
+		$this->add('СЃС‚Р°С‚СЊРё', ['route' => 'admin.articles.index']);
 	});
 }
 
-Другой (IndexController):
+Р”СЂСѓРіРѕР№ (IndexController):
 
 	__construct(){
 		parent::__construct();
 
-		if(Gate::denies('VIEW_ADMIN')) { // права VIEW_ADMIN - permissions таблица можно  Gate::denies('VIEW_ADMIN', new \Hi\Aticle)
+		if(Gate::denies('VIEW_ADMIN')) { // РїСЂР°РІР° VIEW_ADMIN - permissions С‚Р°Р±Р»РёС†Р° РјРѕР¶РЅРѕ  Gate::denies('VIEW_ADMIN', new \Hi\Aticle)
 			abort(403); 
 		}
 		/*
@@ -1758,11 +1758,11 @@ function getMenu(){
 			
 			boot(){
 				$gete->define('VIEW_ADMIN', function($user){
-					return $user->canDo(['VIEW_ADMIN', 'ADD_ARTICLES'], true); // наш метод модели User true - все права  false - хотя бы одно право	
+					return $user->canDo(['VIEW_ADMIN', 'ADD_ARTICLES'], true); // РЅР°С€ РјРµС‚РѕРґ РјРѕРґРµР»Рё User true - РІСЃРµ РїСЂР°РІР°  false - С…РѕС‚СЏ Р±С‹ РѕРґРЅРѕ РїСЂР°РІРѕ	
 				});
 			}
 		*/
-		/*	модель User
+		/*	РјРѕРґРµР»СЊ User
 			canDo($pemission, $require = false){
 				if(is_array($pemission)){
 					foreach($pemission as $permName){
@@ -1773,9 +1773,9 @@ function getMenu(){
 					}
 				}
 				else
-					//this->roles()->get() тоже что и $this->roles получаем все роли
+					//this->roles()->get() С‚РѕР¶Рµ С‡С‚Рѕ Рё $this->roles РїРѕР»СѓС‡Р°РµРј РІСЃРµ СЂРѕР»Рё
 				foreach($this->roles as $role)
-					foreach($role->permission()->get() as $perm)  // или $role->permission 
+					foreach($role->permission()->get() as $perm)  // РёР»Рё $role->permission 
 						if(str_is($pemission, $perm->name))
 					endforeach;
 				endforeach;	
@@ -1788,28 +1788,28 @@ function getMenu(){
 	}
 	
 	index(){
-		$this->title = 'панель админа';
+		$this->title = 'РїР°РЅРµР»СЊ Р°РґРјРёРЅР°';
 		$this->renderOutput();
 	}
 
-Вид в layouts + admin.blade.php 
+Р’РёРґ РІ layouts + admin.blade.php 
 
 
-ПРАВА И ПРИВЕЛЕГИИ
+РџР РђР’Рђ Р РџР РР’Р•Р›Р•Р“РР
 
-создаем миграцию roles + permissions + permission_role + user_role
+СЃРѕР·РґР°РµРј РјРёРіСЂР°С†РёСЋ roles + permissions + permission_role + user_role
 
 
-МОДЕЛИ
+РњРћР”Р•Р›Р
 	marke:model Role
 
-	- модель User связывается с моделью Role
+	- РјРѕРґРµР»СЊ User СЃРІСЏР·С‹РІР°РµС‚СЃСЏ СЃ РјРѕРґРµР»СЊСЋ Role
 	
 		public function roles(){
-			return $this->belongsToMany('Hi\Role', 'user_role'); //'Hi\Role - модель / user_role - таблица
+			return $this->belongsToMany('Hi\Role', 'user_role'); //'Hi\Role - РјРѕРґРµР»СЊ / user_role - С‚Р°Р±Р»РёС†Р°
 		} 
 
-	- модель Role
+	- РјРѕРґРµР»СЊ Role
 		public function users(){
 			return $this->belongsToMany('Hi\Users', 'users'); 
 		} 
@@ -1817,29 +1817,29 @@ function getMenu(){
 			return $this->belongsToMany('Hi\Permission', 'permission_role'); 
 		} 
 
-	- модель Permission связывается с моделью Role
+	- РјРѕРґРµР»СЊ Permission СЃРІСЏР·С‹РІР°РµС‚СЃСЏ СЃ РјРѕРґРµР»СЊСЋ Role
 	
 		public function roles(){
 			return $this->belongsToMany('Hi\Role', 'permission_role'); 
 		} 
 
-РЕПОЗИТОРИИ:
-	Контроллер:
+Р Р•РџРћР—РРўРћР РР:
+	РљРѕРЅС‚СЂРѕР»Р»РµСЂ:
 		Aticles 
 			__construct(Aticlesepository $a_rep)
 
 
-		в контроллере getArticles()
+		РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ getArticles()
 			return $this->a_rep->get();
 
 
 
-в контр create()
+РІ РєРѕРЅС‚СЂ create()
 	if(Gate::denies('save', new \Hi\Article))
 		
 		abort(403)
 
-+ клас политики безопасности:
++ РєР»Р°СЃ РїРѕР»РёС‚РёРєРё Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё:
 
 	php artisan make:policy ArticlPolicy
 
@@ -1848,28 +1848,28 @@ function getMenu(){
 		return $user->canDo('ADD_ARTICLES')
 
 
-+ регистр политику в AuthServicePovider
++ СЂРµРіРёСЃС‚СЂ РїРѕР»РёС‚РёРєСѓ РІ AuthServicePovider
 
-	$policies = [ // список политик которые привязаны к определенным моделям
+	$policies = [ // СЃРїРёСЃРѕРє РїРѕР»РёС‚РёРє РєРѕС‚РѕСЂС‹Рµ РїСЂРёРІСЏР·Р°РЅС‹ Рє РѕРїСЂРµРґРµР»РµРЅРЅС‹Рј РјРѕРґРµР»СЏРј
 		Artivle::class => ArticlPolicy::class	
 	]
 
 
-===Laravel Collective пакет для form просто пает...
+===Laravel Collective РїР°РєРµС‚ РґР»СЏ form РїСЂРѕСЃС‚Рѕ РїР°РµС‚...
 
-	пример 
+	РїСЂРёРјРµСЂ 
 
 	$categories = Category::select(['title', 'alias', 'id']);
 	$categories->where('id',15)->fist()->title;
 		
 
-РЕДАКТИРОВАНИЕ
+Р Р•Р”РђРљРўРР РћР’РђРќРР•
 
---- при resource route
+--- РїСЂРё resource route
 
-	метод store делает сохранение
+	РјРµС‚РѕРґ store РґРµР»Р°РµС‚ СЃРѕС…СЂР°РЅРµРЅРёРµ
 
-	store(Request $request) или (ArticleRequest $articleRequest)
+	store(Request $request) РёР»Рё (ArticleRequest $articleRequest)
 
 
 	$result = $this->a_rep->addArticle($articleRequest);
@@ -1881,28 +1881,28 @@ function getMenu(){
 		return redirect('/admin')->width($result);
 
 
---- addArticle() в репозитории
+--- addArticle() РІ СЂРµРїРѕР·РёС‚РѕСЂРёРё
 
 	addArticle($request)
 	
-		if(Gate::denies('save', $this->model)) // политика безопасности
+		if(Gate::denies('save', $this->model)) // РїРѕР»РёС‚РёРєР° Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё
 			abort(403) 
 
 		$data = $request->except('_token', 'image')
 
 		if(!$data)
-			return ['error' => 'нет'];
+			return ['error' => 'РЅРµС‚'];
 
 
---- создаем класс валидации ArticleRequest
+--- СЃРѕР·РґР°РµРј РєР»Р°СЃСЃ РІР°Р»РёРґР°С†РёРё ArticleRequest
 	artisan make:request ArticleRequest 
 	
-	//переопределяем 
+	//РїРµСЂРµРѕРїСЂРµРґРµР»СЏРµРј 
 	
 	getValidatorInstance()
 		$validator = parent::getValidatorInstance();
 
-	// если поле может быть не всегда:
+	// РµСЃР»Рё РїРѕР»Рµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅРµ РІСЃРµРіРґР°:
 	$validator->sometimes('alias', 'unique|required|max:25', function($input){
 		return !empty($input->alias)
 	});
@@ -1916,55 +1916,55 @@ function getMenu(){
 		...
 	]
 
-	autorize() // нужен ли авторизация + тут проверим есть ли права
+	autorize() // РЅСѓР¶РµРЅ Р»Рё Р°РІС‚РѕСЂРёР·Р°С†РёСЏ + С‚СѓС‚ РїСЂРѕРІРµСЂРёРј РµСЃС‚СЊ Р»Рё РїСЂР°РІР°
 
 	return \Auth::user()->canDo('ADD_ARTICLES');
 
-если нужен метод с кирилицы в латиницу то в репозиторрии делаем метод сами:
+РµСЃР»Рё РЅСѓР¶РµРЅ РјРµС‚РѕРґ СЃ РєРёСЂРёР»РёС†С‹ РІ Р»Р°С‚РёРЅРёС†Сѓ С‚Рѕ РІ СЂРµРїРѕР·РёС‚РѕСЂСЂРёРё РґРµР»Р°РµРј РјРµС‚РѕРґ СЃР°РјРё:
 
-	transliterate($string){ сами пишем :) str_replace()}
+	transliterate($string){ СЃР°РјРё РїРёС€РµРј :) str_replace()}
 
 
-если нужно перезаписать ячейку в request 
+РµСЃР»Рё РЅСѓР¶РЅРѕ РїРµСЂРµР·Р°РїРёСЃР°С‚СЊ СЏС‡РµР№РєСѓ РІ request 
 	$request->merge(['alias' => 'myAlias'])
-	$request->flash(); // сохраняем все данные в сессию что б после редиректа данные в форме
+	$request->flash(); // СЃРѕС…СЂР°РЅСЏРµРј РІСЃРµ РґР°РЅРЅС‹Рµ РІ СЃРµСЃСЃРёСЋ С‡С‚Рѕ Р± РїРѕСЃР»Рµ СЂРµРґРёСЂРµРєС‚Р° РґР°РЅРЅС‹Рµ РІ С„РѕСЂРјРµ
 
 
-РЕСАЙЗ ИЗОБРАЖЕНИЯ
-	расширение intervention image для laravel
-в репозитории
+Р Р•РЎРђР™Р— РР—РћР‘Р РђР–Р•РќРРЇ
+	СЂР°СЃС€РёСЂРµРЅРёРµ intervention image РґР»СЏ laravel
+РІ СЂРµРїРѕР·РёС‚РѕСЂРёРё
 
 if($request->hasFile('image'))
-	$img = $request->file();// возвр обьект файла
+	$img = $request->file();// РІРѕР·РІСЂ РѕР±СЊРµРєС‚ С„Р°Р№Р»Р°
 
 if($img->isValid())
 ...
-$this->model->fill($data); // заполняем модель данными
+$this->model->fill($data); // Р·Р°РїРѕР»РЅСЏРµРј РјРѕРґРµР»СЊ РґР°РЅРЅС‹РјРё
 
-if($request->user()->articles()->save($this->model)) // сохр модель для данного польователя
+if($request->user()->articles()->save($this->model)) // СЃРѕС…СЂ РјРѕРґРµР»СЊ РґР»СЏ РґР°РЅРЅРѕРіРѕ РїРѕР»СЊРѕРІР°С‚РµР»СЏ
 
 
-РЕДАКТИРОВАНИЕ
+Р Р•Р”РђРљРўРР РћР’РђРќРР•
 
-	контроллер
+	РєРѕРЅС‚СЂРѕР»Р»РµСЂ
 		update(Article $article)
 
 		if(Gate::denise())
 
-так как мы через alias а не через id то в RouteServiceProvider
+С‚Р°Рє РєР°Рє РјС‹ С‡РµСЂРµР· alias Р° РЅРµ С‡РµСЂРµР· id С‚Рѕ РІ RouteServiceProvider
 
-	boot() // связали маршрут с моделью
+	boot() // СЃРІСЏР·Р°Р»Рё РјР°СЂС€СЂСѓС‚ СЃ РјРѕРґРµР»СЊСЋ
 		$route->bind('articles', function($value){
 			return \Hi\Article::where('alias', $value)->first()
 		});
 
 
 
-метод sync и detach - синхронизация свяей табл посмотри
+РјРµС‚РѕРґ sync Рё detach - СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ СЃРІСЏРµР№ С‚Р°Р±Р» РїРѕСЃРјРѕС‚СЂРё
 
-виджет акардион динамические вкладки
+РІРёРґР¶РµС‚ Р°РєР°СЂРґРёРѕРЅ РґРёРЅР°РјРёС‡РµСЃРєРёРµ РІРєР»Р°РґРєРё
 
 app('route') app('route')
 
-$chield = self::where('parent', $this->id) // в модели выбор всех дочерних теущ  
+$chield = self::where('parent', $this->id) // РІ РјРѕРґРµР»Рё РІС‹Р±РѕСЂ РІСЃРµС… РґРѕС‡РµСЂРЅРёС… С‚РµСѓС‰  
 	
