@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 
 --
 -- Структура таблицы `articles`
---
+-- eeee
 
 CREATE TABLE IF NOT EXISTS `articles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
